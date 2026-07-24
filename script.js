@@ -229,29 +229,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let isEditing = false;
     let editIndex = -1;
 
-    const defaultProjects = [
-        { title: '开源相册生成器', desc: '结合了视觉美学与性能优化，快速在本地部署极致的展示系统。', bg: '', rating: '5' },
-        { title: 'Glassmorphism UI 库', desc: '完全运用现代 CSS 实现的毛玻璃拟物风组件库，轻量且流畅。', bg: '', rating: '5' }
-    ];
+    const defaultProjects = [];
 
-    const defaultNotes = [
-        { title: '2024 年前端架构设计与代码美学心得', desc: '在这里记录了关于网页设计、排版与视觉交互的前沿知识与学习体验。', bg: '', rating: '5' },
-        { title: '深入理解 JS 事件循环与渲染机制', desc: '底层的逻辑拆解与性能优化分析，对于前端开发者极具参考价值。', bg: '', rating: '4' },
-        { title: 'Canvas 动态粒子特效从零到一实现拆解', desc: '学习如何使用原生 Canvas API 绘制极具沉浸感的动态特效。', bg: '', rating: '5' }
-    ];
+    const defaultNotes = [];
 
-    const defaultDiary = [
-        { title: '雨夜与霓虹的交响曲', desc: '今天在街角喝了咖啡，看着雨滴发呆，心情就像是透明的毛玻璃一样。', bg: '', rating: '5' }
-    ];
+    const defaultDiary = [];
 
-    const defaultSoftware = [
-        { title: 'Cursor 编辑器', desc: '目前地表极强的人工智能辅助代码编辑器，直接颠覆了我的开发效率体验！', bg: '', rating: '5' },
-        { title: 'Notion 知识库', desc: 'All-in-one 星辰大海般的私人知识库与项目管理工具，排版绝配。', bg: '', rating: '5' }
-    ];
+    const defaultSoftware = [];
 
-    const defaultSecret = [
-        { title: '🔒 欢迎来到无人知晓的树洞', desc: '这里是只有输入口令 “youzi” 后才能开启的绝对安全屋，所有的悲喜都在这里成为你的独家加密卷宗。', bg: '', rating: '5' }
-    ];
+    const defaultSecret = [];
 
     function getStoredData(key, defaultData) {
         const data = localStorage.getItem(key);
@@ -320,7 +306,12 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCards(secretGrid, 'customSecret', getStoredData('customSecret', defaultSecret), '密信', 'secret');
     }
 
-    // Initialize loaded items
+    // 在渲染前清除本地存储中与这五类内容相关的键，彻底删除已保存的条目
+    ['customProjects','customNotes','customDiary','customSoftware','customSecret'].forEach(key => {
+        try { localStorage.removeItem(key); } catch(e) { console.warn('localStorage remove failed', e); }
+    });
+
+    // Initialize loaded items（空数据）
     renderAll();
 
     // --- Admin Mode Easter Egg ---
