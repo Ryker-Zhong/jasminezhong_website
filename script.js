@@ -310,6 +310,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let defaultDiary = [...hardcodedDiary];
     let defaultSecret = [...hardcodedSecret];
 
+    const DATA_VERSION = '2.0';
+    const storedVersion = localStorage.getItem('dataVersion');
+    if (storedVersion !== DATA_VERSION) {
+        localStorage.removeItem('customProjects');
+        localStorage.removeItem('customNotes');
+        localStorage.removeItem('customSoftware');
+        localStorage.removeItem('customDiary');
+        localStorage.removeItem('customSecret');
+        localStorage.setItem('dataVersion', DATA_VERSION);
+    }
+
     async function loadServerDefaults() {
         try {
             const r = await fetch('data/projects.json?v=' + Date.now());
