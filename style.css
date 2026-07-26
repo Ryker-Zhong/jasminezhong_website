@@ -40,24 +40,26 @@ body {
     transform: translateX(-50%);
     z-index: 10;
     display: flex;
-    gap: 0.8rem;
+    gap: 0.4rem;
     justify-content: center;
+    flex-wrap: nowrap;
 }
 
 .module-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.65rem 1.3rem;
+    gap: 0.3rem;
+    padding: 0.5rem 0.8rem;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 14px;
     color: rgba(255, 255, 255, 0.85);
-    font-size: 1rem;
+    font-size: 0.85rem;
     cursor: pointer;
     backdrop-filter: blur(8px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
+    white-space: nowrap;
 }
 
 .module-item:hover {
@@ -69,7 +71,7 @@ body {
 }
 
 .module-item i {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 .module-item.active {
