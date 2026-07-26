@@ -26,7 +26,7 @@
     {
         "title": "Xftp",
         "desc": "强大的 SFTP/FTP 客户端，支持标签页管理、文件同步、直接编辑等功能。适合服务器文件管理。",
-        "downloadUrl": "https://www.xftp.com/",
+        "downloadUrl": "https://www.netsarang.com/en/xftp/",
         "rating": 5
     },
     {
@@ -62,7 +62,7 @@
     {
         "title": "Visual Studio Code",
         "desc": "轻量级代码编辑器，微软出品。支持丰富插件扩展、Git 集成、终端调试，自动识别操作系统提供对应版本。",
-        "downloadUrl": "https://code.visualstudio.com/",
+        "downloadUrl": "https://code.visualstudio.com/download",
         "rating": 5
     },
     {
@@ -88,5 +88,11 @@
         "desc": "免费开源的 3D 创作套件，支持建模、雕刻、动画、渲染、视频编辑等全流程 3D 内容制作。社区活跃，教程丰富。",
         "downloadUrl": "https://www.blender.org/download/",
         "rating": 5
+    },
+    {
+        "title": "EV录屏",
+        "desc": "免费无水印的屏幕录制工具，集视频录制与直播推流于一体。支持全平台，输出文件体积小，内存占用低。",
+        "downloadUrl": "https://www.ieway.cn/evcapture.html",
+        "rating": 4
     }
 ]
