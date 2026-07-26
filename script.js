@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             title: '🧠 Obsidian - 知识管理工具',
             desc: '强大的笔记和知识管理应用，支持双向链接、图谱视图、插件系统。完美用于个人知识库、研究笔记、文献管理等场景。',
-            downloadUrl: 'downloads/Obsidian-1.8.10.exe',
+            downloadUrl: 'https://obsidian.md/download',
             rating: 5
         },
         {
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             title: '⚡ PowerToys - 系统增强工具',
             desc: 'Microsoft官方出品的Windows系统增强工具集。包含快速查看、文件批量重命名、窗口管理等功能。',
-            downloadUrl: 'downloads/PowerToysUserSetup-0.96.0-x64.exe',
+            downloadUrl: 'https://github.com/microsoft/PowerToys/releases',
             rating: 5
         },
         {
