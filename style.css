@@ -228,6 +228,7 @@ body.bg-starry {
 /* ─── Home ─── */
 #home.nav-section {
     justify-content: center;
+    padding-top: 5rem;
 }
 .profile-content {
     display: flex;
