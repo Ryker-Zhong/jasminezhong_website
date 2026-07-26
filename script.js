@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('themeToggle');
     const musicToggle = document.getElementById('musicToggle');
     const bgMusic = document.getElementById('bgMusic');
-    let isLightMode = false, isPlaying = false;
+    let isPlaying = false;
     bgMusic.volume = 0.3;
 
     settingsToggle.addEventListener('click', (e) => { e.stopPropagation(); settingsMenu.classList.toggle('show'); });
@@ -14,12 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     themeToggle.addEventListener('click', () => {
-        isLightMode = !isLightMode;
-        document.body.classList.toggle('light-mode', isLightMode);
+        document.body.classList.toggle('bg-starry');
         const icon = themeToggle.querySelector('i');
         const text = themeToggle.querySelector('span');
-        if (isLightMode) { icon.className = 'fa-solid fa-moon'; text.textContent = '夜间模式'; }
-        else { icon.className = 'fa-solid fa-sun'; text.textContent = '白天模式'; }
+        if (document.body.classList.contains('bg-starry')) {
+            icon.className = 'fa-solid fa-star'; text.textContent = '星空银河';
+        } else {
+            icon.className = 'fa-solid fa-tree'; text.textContent = '森林湖畔';
+        }
     });
 
     musicToggle.addEventListener('click', () => {
