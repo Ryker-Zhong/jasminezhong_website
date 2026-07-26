@@ -6,36 +6,6 @@
         "rating": 5
     },
     {
-        "title": "🧹 HiBit Uninstaller",
-        "desc": "强大的软件卸载工具，支持强制卸载、残余文件清理、启动项管理、浏览器扩展管理等功能。",
-        "downloadUrl": "downloads/HiBitUninstaller-setup-3.2.55.exe",
-        "rating": 5
-    },
-    {
-        "title": "🖥️ NoMachine",
-        "desc": "远程桌面连接工具，支持跨平台远程控制、文件传输、音频传输，提供流畅的远程办公体验。",
-        "downloadUrl": "downloads/nomachine_9.2.18_1_x64.exe",
-        "rating": 5
-    },
-    {
-        "title": "📸 PixPin",
-        "desc": "截图与贴图工具，支持区域截图、长截图、贴图标注等功能，提升工作效率。",
-        "downloadUrl": "downloads/PixPin_cn_zh-cn_2.2.4.1.exe",
-        "rating": 5
-    },
-    {
-        "title": "📦 WinRAR",
-        "desc": "老牌压缩解压工具，支持 RAR/ZIP/7Z 等多种格式，提供强大的压缩管理和文件分卷功能。",
-        "downloadUrl": "downloads/winrar-x64-700scp.exe",
-        "rating": 5
-    },
-    {
-        "title": "🌐 Xftp",
-        "desc": "FTP/SFTP 文件传输客户端，支持多标签、文件同步、会话管理，便于服务器文件管理。",
-        "downloadUrl": "downloads/Xftp-8.0.0082p.exe",
-        "rating": 5
-    },
-    {
         "title": "🧠 Obsidian - 知识管理工具",
         "desc": "强大的笔记和知识管理应用，支持双向链接、图谱视图、插件系统。完美用于个人知识库、研究笔记、文献管理等场景。",
         "downloadUrl": "https://obsidian.md/download",

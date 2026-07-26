@@ -13,7 +13,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    background: url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
     background-color: #0b0f19;
 }
 
@@ -31,53 +31,6 @@ body {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
     100% { transform: translateY(0px); }
-}
-
-.top-modules {
-    position: absolute;
-    top: 1.2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    display: flex;
-    gap: 0.4rem;
-    justify-content: center;
-    flex-wrap: nowrap;
-}
-
-.module-item {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.5rem 0.8rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 14px;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 0.85rem;
-    cursor: pointer;
-    backdrop-filter: blur(8px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    user-select: none;
-    white-space: nowrap;
-}
-
-.module-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-
-.module-item i {
-    font-size: 0.9rem;
-}
-
-.module-item.active {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.35);
-    color: white;
 }
 
 .glass-card {
@@ -128,91 +81,6 @@ body {
     visibility: visible;
     transform: translateY(0);
     position: relative;
-}
-
-.content-section {
-    justify-content: flex-start;
-    padding-top: 5rem;
-    gap: 1.5rem;
-}
-
-.section-title {
-    font-size: 1.6rem;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-shrink: 0;
-}
-
-.content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
-    width: 100%;
-    max-width: 1000px;
-    padding-bottom: 2rem;
-}
-
-.content-card {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px;
-    padding: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    text-decoration: none;
-    color: inherit;
-    position: relative;
-    overflow: hidden;
-}
-
-.content-card:hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-.content-card .card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.content-card .card-desc {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-body.light-mode .section-title {
-    color: #1e293b;
-}
-
-body.light-mode .content-card {
-    background: rgba(255, 255, 255, 0.6);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-body.light-mode .content-card:hover {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(255, 255, 255, 1);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-}
-
-body.light-mode .content-card .card-desc {
-    color: #475569;
 }
 
 .profile-content {
@@ -493,25 +361,6 @@ body.light-mode .settings-item {
 
 body.light-mode .settings-item:hover {
     background: rgba(241, 245, 249, 1);
-    color: #0f172a;
-}
-
-body.light-mode .module-item {
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    color: #475569;
-}
-
-body.light-mode .module-item:hover {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: rgba(255, 255, 255, 1);
-    color: #0f172a;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-body.light-mode .module-item.active {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(255, 255, 255, 1);
     color: #0f172a;
 }
 
