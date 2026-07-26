@@ -34,15 +34,14 @@
     </audio>
 
     <nav class="glass-nav">
-        <div class="nav-brand">Jasmine</div>
-        <div class="nav-links">
-            <a href="#home" class="nav-link active" data-section="home">主页</a>
-            <a href="#projects" class="nav-link" data-section="projects">项目作品</a>
-            <a href="#notes" class="nav-link" data-section="notes">学习笔记</a>
-            <a href="#diary" class="nav-link" data-section="diary">生活日记</a>
-            <a href="#software" class="nav-link" data-section="software">软件分享</a>
+        <div class="nav-links" id="navLinks">
+            <a href="#home" class="nav-link active" data-section="home"><i class="fa-solid fa-house"></i> 主页</a>
+            <a href="#projects" class="nav-link" data-section="projects"><i class="fa-solid fa-code"></i> 项目</a>
+            <a href="#notes" class="nav-link" data-section="notes"><i class="fa-solid fa-book-open"></i> 笔记</a>
+            <a href="#diary" class="nav-link" data-section="diary"><i class="fa-solid fa-feather"></i> 日记</a>
+            <a href="#software" class="nav-link" data-section="software"><i class="fa-solid fa-box"></i> 软件</a>
+            <a href="#secret" class="nav-link" data-section="secret"><i class="fa-solid fa-lock"></i> 秘密小屋</a>
         </div>
-        <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
     </nav>
 
     <div class="glass-card">
@@ -118,6 +117,15 @@
                     </table>
                 </div>
                 <p class="download-tip"><i class="fa-solid fa-shield-halved"></i> 请优先选择官方网站下载，获取安全、最新版本。</p>
+            </section>
+
+            <!-- ──── Secret ──── -->
+            <section id="secret" class="nav-section">
+                <h2 class="section-title"><i class="fa-solid fa-lock"></i> 秘密小屋</h2>
+                <div class="section-subtitle">这里藏着一些不为人知的东西</div>
+                <div class="secret-placeholder">
+                    <p>🔮 秘密花园建设中...</p>
+                </div>
             </section>
 
         </main>
