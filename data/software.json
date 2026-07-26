@@ -27,18 +27,66 @@
         "title": "Xftp",
         "desc": "强大的 SFTP/FTP 客户端，支持标签页管理、文件同步、直接编辑等功能。适合服务器文件管理。",
         "downloadUrl": "https://www.xftp.com/",
-        "rating": 4
+        "rating": 5
     },
     {
         "title": "NoMachine",
         "desc": "高性能的远程桌面软件，提供流畅的远程桌面体验。支持各操作系统，适合远程办公和服务器管理。",
         "downloadUrl": "https://www.nomachine.com/",
-        "rating": 4
+        "rating": 5
     },
     {
         "title": "WinRAR",
         "desc": "知名的压缩/解压工具，支持 RAR、ZIP 等多种格式。提供中文个人免费版，界面简洁易用。",
         "downloadUrl": "https://www.winrar.com/",
+        "rating": 5
+    },
+    {
+        "title": "ToDesk",
+        "desc": "远程控制软件，支持全平台（Windows, macOS, Linux, 移动端）客户端。流畅稳定，适合远程办公与技术支持。",
+        "downloadUrl": "https://www.todesk.com/",
         "rating": 4
+    },
+    {
+        "title": "Keil MDK",
+        "desc": "嵌入式开发工具，ARM 微控制器软件开发的首选 IDE。支持编译、调试、仿真等完整开发流程。",
+        "downloadUrl": "https://www.keil.com/download/product/",
+        "rating": 4
+    },
+    {
+        "title": "嘉立创EDA",
+        "desc": "国产 PCB 设计工具，支持客户端与浏览器在线使用。原理图绘制、PCB 布局、元件库管理一站式完成。软件免费。",
+        "downloadUrl": "https://lceda.cn/page/download",
+        "rating": 5
+    },
+    {
+        "title": "Visual Studio Code",
+        "desc": "轻量级代码编辑器，微软出品。支持丰富插件扩展、Git 集成、终端调试，自动识别操作系统提供对应版本。",
+        "downloadUrl": "https://code.visualstudio.com/",
+        "rating": 5
+    },
+    {
+        "title": "Proteus",
+        "desc": "电路仿真与 PCB 设计软件，支持微控制器仿真、SPICE 电路分析。广泛应用于电子工程教育与嵌入式开发。",
+        "downloadUrl": "https://www.labcenter.com/",
+        "rating": 3
+    },
+    {
+        "title": "STC-ISP",
+        "desc": "STC 单片机烧录软件，在 STC 官网可下载最新版本。完全免费，支持 STC 全系列单片机程序下载与调试。",
+        "downloadUrl": "https://www.stcmicro.com/rjxz.html",
+        "rating": 4
+    },
+    {
+        "title": "SolidWorks",
+        "desc": "专业 3D CAD 设计软件，广泛应用于机械设计、工业制造领域。支持参数化建模、装配体设计与工程图输出。",
+        "downloadUrl": "https://www.solidworks.com/",
+        "rating": 4
+    },
+    {
+        "title": "Blender",
+        "desc": "免费开源的 3D 创作套件，支持建模、雕刻、动画、渲染、视频编辑等全流程 3D 内容制作。社区活跃，教程丰富。",
+        "downloadUrl": "https://www.blender.org/download/",
+        "rating": 5
     }
 ]
