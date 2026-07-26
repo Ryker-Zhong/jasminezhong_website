@@ -15,7 +15,7 @@ body {
     align-items: center;
     background: url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
     background-color: #0b0f19;
-    padding-top: 72px;
+    padding-top: 0;
 }
 
 body.bg-starry {
@@ -804,7 +804,7 @@ body.bg-starry {
 
 /* ─── Mobile Nav ─── */
 @media (max-width: 768px) {
-    body { padding-top: 62px; }
+    body { padding-top: 0; }
     .glass-nav {
         top: 16px;
         padding: 0.35rem;
