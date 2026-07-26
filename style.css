@@ -299,6 +299,44 @@ body.light-mode .add-btn:hover {
     border-color: rgba(59, 130, 246, 0.3);
 }
 
+.download-btn {
+    position: absolute;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.download-btn:hover {
+    background: #10b981;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    border-color: #10b981;
+}
+
+body.light-mode .download-btn {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+body.light-mode .download-btn:hover {
+    background: #10b981;
+    color: white;
+}
+
 .item-card:hover .delete-btn,
 .item-card:hover .edit-btn,
 .list-item:hover .delete-btn,
@@ -597,14 +635,14 @@ body.light-mode .add-btn:hover {
 
 /* Light Mode Theme overrides */
 body.light-mode {
-    /* Soft light aesthetic roses (AI Generated) */
-    background: url('bg-light.png') center/cover no-repeat;
-    background-color: #fff1f2;
-    color: #4c0519;
+    /* Use same background as dark mode but with light overlay */
+    background: url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    background-color: #f5f0eb;
+    color: #1e293b;
 }
 
 body.light-mode .background-overlay {
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, rgba(254, 226, 226, 0.75) 100%);
+    background: radial-gradient(circle at center, rgba(245, 240, 235, 0.35) 0%, rgba(255, 250, 245, 0.65) 100%);
 }
 
 body.light-mode .glass-card {
