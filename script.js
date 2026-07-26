@@ -45,8 +45,15 @@ document.addEventListener('DOMContentLoaded', () => {
     moduleItems.forEach(item => {
         item.addEventListener('click', () => {
             const module = item.dataset.module;
+            if (module === 'home') {
+                moduleItems.forEach(m => m.classList.remove('active'));
+                item.classList.add('active');
+                showSection('home');
+                return;
+            }
             if (item.classList.contains('active')) {
                 item.classList.remove('active');
+                moduleItems.forEach(m => m.dataset.module === 'home' && m.classList.add('active'));
                 showSection('home');
                 return;
             }
@@ -55,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             showSection(module);
         });
     });
+    // Activate home button by default
+    document.querySelector('.module-item[data-module="home"]')?.classList.add('active');
 
     function showSection(name) {
         Object.values(sections).forEach(s => s.classList.remove('active'));
