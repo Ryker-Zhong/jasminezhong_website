@@ -205,12 +205,10 @@ body.bg-starry {
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
-.main-container::-webkit-scrollbar { width: 5px; }
-.main-container::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 6px;
-}
+.main-container::-webkit-scrollbar { display: none; }
 
 /* ─── Sections ─── */
 .nav-section {
