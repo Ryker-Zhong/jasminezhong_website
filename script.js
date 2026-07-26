@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem(key, JSON.stringify(defaultData));
                 return defaultData;
             }
-            if (parsed.length === 0 && defaultData.length > 0 && (key === 'customSoftware' || key === 'customNotes')) {
+            if (parsed.length === 0 && defaultData.length > 0) {
                 localStorage.setItem(key, JSON.stringify(defaultData));
                 return defaultData;
             }
