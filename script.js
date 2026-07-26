@@ -283,45 +283,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const defaultSoftware = [
         {
+            title: '📄 下载说明',
+            desc: '网站中的下载入口说明，使用本地下载说明文档查看当前可用资源。',
+            downloadUrl: 'downloads/readme.md',
+            rating: 5
+        },
+        {
             title: '🧠 Obsidian - 知识管理工具',
             desc: '强大的笔记和知识管理应用，支持双向链接、图谱视图、插件系统。完美用于个人知识库、研究笔记、文献管理等场景。',
             downloadUrl: 'https://obsidian.md/download',
             rating: 5
         },
         {
-            title: '🛠️ HiBit Uninstaller - 卸载工具',
-            desc: '专业软件卸载工具，可彻底删除程序残留文件和注册表项。比Windows自带卸载工具更深度和有效。',
-            downloadUrl: 'downloads/HiBitUninstaller-setup-3.2.55.exe',
-            rating: 5
-        },
-        {
-            title: '🖥️ NoMachine - 远程桌面',
-            desc: '免费高效的远程桌面软件，支持远程访问和控制。适合远程办公、技术支持、文件传输等场景。',
-            downloadUrl: 'downloads/nomachine_9.2.18_1_x64.exe',
-            rating: 5
-        },
-        {
-            title: '🎨 PixPin - 截图工具',
-            desc: '现代化的截图和标注工具，支持滚动截图、贴图、标记等功能。界面美观，操作快速高效。',
-            downloadUrl: 'downloads/PixPin_cn_zh-cn_2.2.4.1.exe',
-            rating: 5
-        },
-        {
             title: '⚡ PowerToys - 系统增强工具',
             desc: 'Microsoft官方出品的Windows系统增强工具集。包含快速查看、文件批量重命名、窗口管理等功能。',
             downloadUrl: 'https://github.com/microsoft/PowerToys/releases',
-            rating: 5
-        },
-        {
-            title: '📦 WinRAR - 压缩工具',
-            desc: '业界标准的压缩和解压软件，支持RAR、ZIP等多种格式。稳定可靠，功能全面强大。',
-            downloadUrl: 'downloads/winrar-x64-700scp.exe',
-            rating: 5
-        },
-        {
-            title: '📡 Xftp - 文件传输',
-            desc: '专业的SFTP/FTP文件传输工具，安全高效。适合与远程服务器传输文件。',
-            downloadUrl: 'downloads/Xftp-8.0.0082p.exe',
             rating: 5
         }
     ];
@@ -334,12 +310,34 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem(key, JSON.stringify(defaultData));
             return defaultData;
         }
-        return JSON.parse(data);
+        try {
+            const parsed = JSON.parse(data);
+            if (!Array.isArray(parsed)) {
+                localStorage.setItem(key, JSON.stringify(defaultData));
+                return defaultData;
+            }
+            if (parsed.length === 0 && defaultData.length > 0 && (key === 'customSoftware' || key === 'customNotes')) {
+                localStorage.setItem(key, JSON.stringify(defaultData));
+                return defaultData;
+            }
+            return parsed;
+        } catch (err) {
+            localStorage.setItem(key, JSON.stringify(defaultData));
+            return defaultData;
+        }
     }
 
     function renderCards(gridElement, dataKey, itemsArray, typeLabel, typeString) {
         if (!gridElement) return;
         gridElement.innerHTML = '';
+        if (!Array.isArray(itemsArray) || itemsArray.length === 0) {
+            gridElement.innerHTML = `
+                <div class="empty-card">
+                    <p>当前暂无内容，点击右上角“+”按钮添加新条目。</p>
+                </div>
+            `;
+            return;
+        }
         itemsArray.forEach((item, index) => {
             const card = document.createElement('div');
             card.classList.add('item-card');
@@ -412,12 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCards(secretGrid, 'customSecret', getStoredData('customSecret', defaultSecret), '密信', 'secret');
     }
 
-    // 在渲染前清除本地存储中与这五类内容相关的键，彻底删除已保存的条目
-    ['customProjects','customNotes','customDiary','customSoftware','customSecret'].forEach(key => {
-        try { localStorage.removeItem(key); } catch(e) { console.warn('localStorage remove failed', e); }
-    });
-
-    // Initialize loaded items（空数据）
+    // Initialize loaded items
     renderAll();
 
     // --- Admin Mode Easter Egg ---
