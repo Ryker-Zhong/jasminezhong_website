@@ -201,7 +201,7 @@ body.bg-starry {
     height: 100%;
     position: relative;
     width: 100%;
-    padding-top: 2rem;
+    padding-top: 6rem;
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
@@ -228,7 +228,7 @@ body.bg-starry {
 /* ─── Home ─── */
 #home.nav-section {
     justify-content: flex-start;
-    padding-top: 5rem;
+    padding-top: 1rem;
 }
 .profile-content {
     display: flex;
