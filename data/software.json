@@ -1,0 +1,44 @@
+[
+    {
+        "title": "Obsidian",
+        "desc": "强大的笔记和知识管理应用，支持双向链接、图谱视图、插件系统。完美用于个人知识库、研究笔记、文献管理等场景。",
+        "downloadUrl": "https://obsidian.md/download",
+        "rating": 5
+    },
+    {
+        "title": "PowerToys",
+        "desc": "Microsoft 官方出品的 Windows 系统增强工具集。包含快速查看、文件批量重命名、窗口管理、颜色取色器等功能。",
+        "downloadUrl": "https://github.com/microsoft/PowerToys/releases",
+        "rating": 5
+    },
+    {
+        "title": "HiBit Uninstaller",
+        "desc": "免费且强大的软件卸载工具，支持强制卸载、注册表清理、安装监视器等功能。绿色便携，无广告。",
+        "downloadUrl": "http://www.hibitsoft.ir/Uninstaller.html",
+        "rating": 5
+    },
+    {
+        "title": "PixPin",
+        "desc": "功能丰富的截图/贴图工具，支持长截图、GIF 录制、OCR 文字识别和图片编辑。提升工作效率的利器。",
+        "downloadUrl": "https://pixpinapp.com/",
+        "rating": 5
+    },
+    {
+        "title": "Xftp",
+        "desc": "强大的 SFTP/FTP 客户端，支持标签页管理、文件同步、直接编辑等功能。适合服务器文件管理。",
+        "downloadUrl": "https://www.xftp.com/",
+        "rating": 4
+    },
+    {
+        "title": "NoMachine",
+        "desc": "高性能的远程桌面软件，提供流畅的远程桌面体验。支持各操作系统，适合远程办公和服务器管理。",
+        "downloadUrl": "https://www.nomachine.com/",
+        "rating": 4
+    },
+    {
+        "title": "WinRAR",
+        "desc": "知名的压缩/解压工具，支持 RAR、ZIP 等多种格式。提供中文个人免费版，界面简洁易用。",
+        "downloadUrl": "https://www.winrar.com/",
+        "rating": 4
+    }
+]
