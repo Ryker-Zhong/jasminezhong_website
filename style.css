@@ -17,6 +17,11 @@ body {
     background-color: #0b0f19;
 }
 
+body.bg-starry {
+    background: url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    background-color: #0b0f19;
+}
+
 .background-overlay {
     position: fixed;
     top: 0;
@@ -297,72 +302,7 @@ body {
     color: white;
 }
 
-body.light-mode {
-    background: url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-    background-color: #f5f0eb;
-    color: #1e293b;
-}
 
-body.light-mode .background-overlay {
-    background: radial-gradient(circle at center, rgba(245, 240, 235, 0.35) 0%, rgba(255, 250, 245, 0.65) 100%);
-}
-
-body.light-mode .glass-card {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-}
-
-body.light-mode .avatar-wrapper {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-}
-
-body.light-mode .status-dot {
-    border: 3px solid #f1f5f9;
-}
-
-body.light-mode .subtitle,
-body.light-mode .quote,
-body.light-mode .footer {
-    color: #475569;
-}
-
-body.light-mode .social-icon {
-    background: rgba(255, 255, 255, 0.6);
-    color: #334155;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-}
-
-body.light-mode .social-icon:hover {
-    background: rgba(255, 255, 255, 1);
-    border-color: rgba(255, 255, 255, 1);
-    color: #0f172a;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-body.light-mode .settings-btn {
-    background: rgba(255, 255, 255, 0.6);
-    color: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.8);
-}
-
-body.light-mode .settings-menu {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(255, 255, 255, 1);
-    color: #1e293b;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-body.light-mode .settings-item {
-    color: #475569;
-}
-
-body.light-mode .settings-item:hover {
-    background: rgba(241, 245, 249, 1);
-    color: #0f172a;
-}
 
 #particles-container {
     position: fixed;
@@ -383,11 +323,6 @@ body.light-mode .settings-item:hover {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 200, 200, 0.3);
     animation: rise linear infinite;
     opacity: 0;
-}
-
-body.light-mode .particle {
-    background: rgba(220, 38, 38, 0.5);
-    box-shadow: 0 0 10px rgba(220, 38, 38, 0.5), 0 0 20px rgba(220, 38, 38, 0.2);
 }
 
 @keyframes rise {
@@ -418,21 +353,10 @@ body.light-mode .particle {
     width: 100%;
 }
 
-body.light-mode .email-display {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.15);
-    color: #eab308;
-    box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
-}
-
 .email-desc {
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.95rem;
     line-height: 1.6;
-}
-
-body.light-mode .email-desc {
-    color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-overlay {
@@ -488,11 +412,6 @@ body.light-mode .email-desc {
     transform: translateY(0) scale(1);
 }
 
-body.light-mode .modal-box {
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-}
-
 .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -520,15 +439,7 @@ body.light-mode .modal-box {
     color: white;
 }
 
-body.light-mode .btn-cancel {
-    border-color: rgba(0,0,0,0.3);
-    color: #475569;
-}
 
-body.light-mode .btn-cancel:hover {
-    background: rgba(0,0,0,0.05);
-    color: #1e293b;
-}
 
 .btn-confirm {
     background: #10b981;
