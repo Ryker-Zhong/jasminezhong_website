@@ -227,8 +227,7 @@ body.bg-starry {
 
 /* ─── Home ─── */
 #home.nav-section {
-    justify-content: flex-start;
-    padding-top: 1rem;
+    justify-content: center;
 }
 .profile-content {
     display: flex;
