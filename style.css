@@ -35,26 +35,25 @@ body {
 
 .top-modules {
     position: absolute;
-    top: 1rem;
+    top: 1.2rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
     display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    gap: 0.8rem;
     justify-content: center;
 }
 
 .module-item {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+    padding: 0.65rem 1.3rem;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
+    border-radius: 14px;
     color: rgba(255, 255, 255, 0.85);
-    font-size: 0.85rem;
+    font-size: 1rem;
     cursor: pointer;
     backdrop-filter: blur(8px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -70,7 +69,7 @@ body {
 }
 
 .module-item i {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
 }
 
 .module-item.active {
