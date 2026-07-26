@@ -688,4 +688,102 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // --- Debug Panel (Ctrl+Shift+D) ---
+    function createDebugPanel() {
+        const panel = document.createElement('div');
+        panel.id = 'debug-panel';
+        panel.innerHTML = `
+            <div class="debug-header">
+                <span>🔧 Debug Panel</span>
+                <button id="debug-close">×</button>
+            </div>
+            <div class="debug-body">
+                <div class="debug-section">
+                    <div class="debug-label">数据版本</div>
+                    <div class="debug-value" id="debug-version">${DATA_VERSION}</div>
+                </div>
+                <div class="debug-section">
+                    <div class="debug-label">localStorage</div>
+                    <div class="debug-value" id="debug-storage"></div>
+                </div>
+                <div class="debug-section">
+                    <div class="debug-label">服务器数据状态</div>
+                    <div class="debug-value" id="debug-server">未检测</div>
+                </div>
+                <div class="debug-actions">
+                    <button id="debug-refresh" class="debug-btn">🔄 从服务器刷新</button>
+                    <button id="debug-clear" class="debug-btn debug-btn-danger">🗑️ 清除缓存并刷新</button>
+                </div>
+                <div class="debug-toast" id="debug-toast"></div>
+            </div>
+        `;
+        document.body.appendChild(panel);
+
+        document.getElementById('debug-close').onclick = () => panel.classList.remove('show');
+        document.getElementById('debug-refresh').onclick = async () => {
+            showDebugToast('正在从服务器加载数据...');
+            await loadServerDefaults();
+            localStorage.removeItem('customProjects');
+            localStorage.removeItem('customNotes');
+            localStorage.removeItem('customSoftware');
+            localStorage.removeItem('customDiary');
+            localStorage.removeItem('customSecret');
+            renderAll();
+            updateDebugInfo();
+            showDebugToast('✅ 数据已刷新');
+        };
+        document.getElementById('debug-clear').onclick = () => {
+            localStorage.clear();
+            showDebugToast('🧹 缓存已清除，正在刷新...');
+            setTimeout(() => location.reload(), 500);
+        };
+    }
+
+    function updateDebugInfo() {
+        const storageEl = document.getElementById('debug-storage');
+        const serverEl = document.getElementById('debug-server');
+        if (!storageEl) return;
+        const keys = ['customProjects', 'customNotes', 'customSoftware', 'customDiary', 'customSecret'];
+        let html = '';
+        keys.forEach(key => {
+            const raw = localStorage.getItem(key);
+            try {
+                const arr = JSON.parse(raw);
+                html += `<div>${key}: <span class="debug-badge">${Array.isArray(arr) ? arr.length : '?'} 条</span></div>`;
+            } catch {
+                html += `<div>${key}: <span class="debug-badge debug-badge-warn">无效数据</span></div>`;
+            }
+        });
+        storageEl.innerHTML = html;
+        serverEl.innerHTML = `
+            <div>defaultProjects: <span class="debug-badge">${defaultProjects.length} 条</span></div>
+            <div>defaultNotes: <span class="debug-badge">${defaultNotes.length} 条</span></div>
+            <div>defaultSoftware: <span class="debug-badge">${defaultSoftware.length} 条</span></div>
+        `;
+    }
+
+    let debugToastTimer;
+
+    function showDebugToast(msg) {
+        const el = document.getElementById('debug-toast');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(debugToastTimer);
+        debugToastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+            e.preventDefault();
+            const panel = document.getElementById('debug-panel');
+            if (panel) {
+                panel.classList.toggle('show');
+                if (panel.classList.contains('show')) updateDebugInfo();
+            }
+        }
+    });
+
+    createDebugPanel();
 });
