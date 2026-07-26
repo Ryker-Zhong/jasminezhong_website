@@ -262,7 +262,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    const defaultNotes = [];
+    const defaultNotes = [
+        {
+            title: '🕉️ 佛教史',
+            desc: '系统学习佛教的起源、发展、传播等内容。包含佛教的黄金时代、中心转移、消长变化等重要历史阶段。',
+            bg: 'linear-gradient(135deg, rgba(245,158,11,0.8) 0%, rgba(217,119,6,0.8) 100%)',
+            noteUrl: 'notes/佛教史/目录.md',
+            rating: 5
+        },
+        {
+            title: '☯️ 道教史',
+            desc: '深入了解道教的起源、发展演变及其在中国传统文化中的地位。涵盖汉魏到当代各个历史时期。',
+            bg: 'linear-gradient(135deg, rgba(239,68,68,0.8) 0%, rgba(220,38,38,0.8) 100%)',
+            noteUrl: 'notes/道教史/附录.md',
+            rating: 5
+        }
+    ];
 
     const defaultDiary = [];
 
@@ -350,11 +365,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 downloadBtnHtml = `<a href="${item.downloadUrl}" class="download-btn" title="下载" download><i class="fa-solid fa-download"></i> 下载</a>`;
             }
             
+            let viewBtnHtml = '';
+            if (typeString === 'note' && item.noteUrl) {
+                viewBtnHtml = `<a href="${item.noteUrl}" class="view-btn" title="查看笔记" target="_blank"><i class="fa-solid fa-book-open"></i> 查看</a>`;
+            }
+            
             card.innerHTML = `
                 <h3>${item.title}</h3>
                 ${ratingHtml}
                 <p>${item.desc}</p>
                 ${downloadBtnHtml}
+                ${viewBtnHtml}
                 <button class="edit-btn" data-index="${index}" title="编辑"><i class="fa-solid fa-pen"></i></button>
                 <button class="delete-btn" data-index="${index}" title="删除"><i class="fa-solid fa-trash"></i></button>
             `;
@@ -439,10 +460,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const inputBg = document.getElementById('modal-input-bg');
         const inputDownload = document.getElementById('modal-input-download');
+        const inputNote = document.getElementById('modal-input-note');
 
         inputDesc.style.display = 'block';
         if (inputRating) inputRating.style.display = 'block';
         if (inputDownload) inputDownload.style.display = 'none';
+        if (inputNote) inputNote.style.display = 'none';
 
         if (type === 'project') {
             modalTitle.textContent = editing ? '编辑项目作品' : '发布新项目作品';
@@ -453,6 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (inputDownload) inputDownload.style.display = 'block';
         } else if (type === 'note') {
             modalTitle.textContent = editing ? '编辑学习笔记' : '发布新笔记';
+            if (inputNote) inputNote.style.display = 'block';
         } else if (type === 'secret') {
             modalTitle.textContent = editing ? '翻阅私密档案' : '封装加密档案';
         }
@@ -462,12 +486,14 @@ document.addEventListener('DOMContentLoaded', () => {
             inputDesc.value = itemData.desc || '';
             if (inputBg) inputBg.value = itemData.bg || '';
             if (inputDownload) inputDownload.value = itemData.downloadUrl || '';
+            if (inputNote) inputNote.value = itemData.noteUrl || '';
             if (inputRating && itemData.rating) inputRating.value = itemData.rating; else if (inputRating) inputRating.value = '5';
         } else {
             inputTitle.value = '';
             inputDesc.value = '';
             if (inputBg) inputBg.value = '';
             if (inputDownload) inputDownload.value = '';
+            if (inputNote) inputNote.value = '';
             if (inputRating) inputRating.value = '5';
         }
         
@@ -539,8 +565,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const desc = inputDesc.value.trim();
         const inputBg = document.getElementById('modal-input-bg');
         const inputDownload = document.getElementById('modal-input-download');
+        const inputNote = document.getElementById('modal-input-note');
         const bg = inputBg ? inputBg.value.trim() : '';
         const downloadUrl = inputDownload ? inputDownload.value.trim() : '';
+        const noteUrl = inputNote ? inputNote.value.trim() : '';
         const rating = (inputRating && inputRating.style.display !== 'none') ? inputRating.value : '5';
 
         if (!title) {
@@ -555,6 +583,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // 软件类型添加下载链接
         if (currentAddType === 'software' && downloadUrl) {
             itemPayload.downloadUrl = downloadUrl;
+        }
+        
+        // 笔记类型添加笔记链接
+        if (currentAddType === 'note' && noteUrl) {
+            itemPayload.noteUrl = noteUrl;
         }
 
         if (currentAddType === 'project') {
