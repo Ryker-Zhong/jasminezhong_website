@@ -337,6 +337,44 @@ body.light-mode .download-btn:hover {
     color: white;
 }
 
+.view-btn {
+    position: absolute;
+    bottom: 1.2rem;
+    right: 1.2rem;
+    background: rgba(99, 102, 241, 0.2);
+    color: #6366f1;
+    border: 1px solid rgba(99, 102, 241, 0.5);
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.view-btn:hover {
+    background: #6366f1;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    border-color: #6366f1;
+}
+
+body.light-mode .view-btn {
+    background: rgba(99, 102, 241, 0.1);
+    color: #4f46e5;
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+body.light-mode .view-btn:hover {
+    background: #6366f1;
+    color: white;
+}
+
 .item-card:hover .delete-btn,
 .item-card:hover .edit-btn,
 .list-item:hover .delete-btn,
