@@ -6,18 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jasmine - Developer & Dreamer</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <!-- Background overlay for aesthetic -->
     <div class="background-overlay"></div>
-
-    <!-- Dynamic Particles Container -->
     <div id="particles-container"></div>
 
-    <!-- Top Right Controls -->
     <div class="top-right-controls">
         <button id="settingsToggle" class="settings-btn" title="设置">
             <i class="fa-solid fa-gear"></i>
@@ -34,44 +29,16 @@
         </div>
     </div>
 
-    <!-- Background Music -->
     <audio id="bgMusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <div class="glass-card">
-        <!-- Top Navigation -->
-        <nav class="nav-bar">
-            <ul id="nav-tabs">
-                <li class="active">
-                    <a href="#" data-target="home"><i class="fa-regular fa-user"></i> 主页</a>
-                </li>
-                <li>
-                    <a href="#" data-target="projects"><i class="fa-solid fa-code"></i> 项目作品</a>
-                </li>
-                <li>
-                    <a href="#" data-target="notes"><i class="fa-solid fa-book-open"></i> 学习笔记</a>
-                </li>
-                <li>
-                    <a href="#" data-target="diary"><i class="fa-solid fa-leaf"></i> 生活日记</a>
-                </li>
-                <li>
-                    <a href="#" data-target="software"><i class="fa-solid fa-cube"></i> 软件分享</a>
-                </li>
-                <li>
-                    <a href="#" data-target="secret"><i class="fa-solid fa-lock"></i> 秘密小屋</a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Main Content Area -->
         <main class="main-container">
-            <!-- Home Section -->
             <section id="home" class="nav-section active">
                 <div class="profile-content">
                     <div class="avatar-wrapper">
-                        <img src="images/avatar.jpg?v=2" onerror="this.onerror=null; this.src='images/avatar1.png?v=2';" alt="Jasmine Avatar"
-                            class="avatar">
+                        <img src="images/avatar.jpg?v=2" onerror="this.onerror=null; this.src='images/avatar1.png?v=2';" alt="Jasmine Avatar" class="avatar">
                         <div class="status-dot"></div>
                     </div>
 
@@ -80,99 +47,37 @@
 
                     <p class="quote">"You are my dream of gain and loss, and I am dispensable to you."</p>
 
-
-
                     <div class="social-links">
-                        <a href="https://github.com/Ryker-Zhong" target="_blank" class="social-icon" title="GitHub"><i
-                                class="fa-brands fa-github"></i></a>
-
+                        <a href="https://github.com/Ryker-Zhong" target="_blank" class="social-icon" title="GitHub">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
                         <a href="javascript:void(0)" class="social-icon qr-trigger" title="WeChat">
                             <i class="fa-brands fa-weixin"></i>
                             <img src="images/wechat.jpg" alt="WeChat QR" class="qr-popup">
                         </a>
-
                         <a href="javascript:void(0)" class="social-icon qr-trigger" title="QQ">
                             <i class="fa-brands fa-qq"></i>
                             <img src="images/qq.jpg" alt="QQ QR" class="qr-popup">
                         </a>
-
-                        <a href="#" id="email-icon-link" class="social-icon" title="Email"><i
-                                class="fa-regular fa-envelope"></i></a>
+                        <a href="#" id="email-icon-link" class="social-icon" title="Email">
+                            <i class="fa-regular fa-envelope"></i>
+                        </a>
                     </div>
-                </div>
-            </section>
-
-            <!-- Projects Section -->
-            <section id="projects" class="nav-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fa-solid fa-code"></i> 项目作品</h2>
-                    <button class="add-btn" data-type="project" title="添加新项目"><i class="fa-solid fa-plus"></i></button>
-                </div>
-                <div class="cards-grid" id="projects-grid">
-                    <!-- Dynamic Items rendered by JS -->
-                </div>
-            </section>
-
-            <!-- Notes Section -->
-            <section id="notes" class="nav-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fa-solid fa-book-open"></i> 学习笔记</h2>
-                    <button class="add-btn" data-type="note" title="添加新笔记"><i class="fa-solid fa-plus"></i></button>
-                </div>
-                <div class="cards-grid" id="notes-grid">
-                    <!-- Dynamic Items rendered by JS -->
-                </div>
-            </section>
-
-            <!-- Diary Section -->
-            <section id="diary" class="nav-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fa-solid fa-leaf"></i> 生活日记</h2>
-                    <button class="add-btn" data-type="diary" title="写新日记"><i class="fa-solid fa-plus"></i></button>
-                </div>
-                <div class="cards-grid" id="diary-grid">
-                    <!-- Dynamic Items rendered by JS -->
-                </div>
-            </section>
-
-            <!-- Software Section -->
-            <section id="software" class="nav-section">
-                <div class="section-header">
-                    <h2 class="section-title"><i class="fa-solid fa-cube"></i> 工具点评</h2>
-                    <button class="add-btn" data-type="software" title="添加软件点评"><i
-                            class="fa-solid fa-plus"></i></button>
-                </div>
-                <div class="cards-grid" id="software-grid">
-                    <!-- Dynamic Items rendered by JS -->
-                </div>
-            </section>
-
-            <!-- Secret Section -->
-            <section id="secret" class="nav-section">
-                <div class="section-header">
-                    <h2 class="section-title" style="color: #fbbf24; text-shadow: 0 0 10px rgba(251,191,36,0.3);"><i
-                            class="fa-solid fa-lock"></i> 秘密小屋</h2>
-                    <button class="add-btn" data-type="secret" title="在秘密小屋进行私密记录"><i
-                            class="fa-solid fa-plus"></i></button>
-                </div>
-                <div class="cards-grid" id="secret-grid">
-                    <!-- Dynamic Items rendered by JS -->
                 </div>
             </section>
         </main>
 
-        <!-- Footer -->
         <footer class="footer">
             赣ICP备2026005556号
            © 2026-2029 JASMINE-ZHONG
         </footer>
     </div>
 
-    <!-- Email Modal -->
     <div id="email-modal" class="modal-overlay">
         <div class="modal-box email-box">
-            <h3 class="modal-title" style="text-align: center; margin-bottom: -0.5rem;"><i
-                    class="fa-solid fa-envelope-open-text"></i> 联系邮箱</h3>
+            <h3 class="modal-title" style="text-align: center; margin-bottom: -0.5rem;">
+                <i class="fa-solid fa-envelope-open-text"></i> 联系邮箱
+            </h3>
             <div class="email-display">
                 <span id="email-text">3127737156@qq.com</span>
             </div>
@@ -180,57 +85,13 @@
             <div class="modal-actions" style="justify-content: center; margin-top: 1rem; gap: 1rem;">
                 <button class="btn-cancel" id="close-email-btn" style="flex: 1;">关闭</button>
                 <button id="copy-email-btn" class="btn-confirm"
-                    style="flex: 1.5; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.2);"><i
-                        class="fa-regular fa-copy"></i> 复制地址</button>
+                    style="flex: 1.5; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">
+                    <i class="fa-regular fa-copy"></i> 复制地址
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Custom Dialog Modal (Replaces native prompt/alert/confirm) -->
-    <div id="dialog-modal" class="modal-overlay" style="z-index: 2000;">
-        <div class="modal-box" style="max-width: 360px; text-align: center; padding: 2rem;">
-            <h3 class="modal-title" id="dialog-title" style="margin-bottom: 0.8rem; font-size: 1.3rem;"></h3>
-            <p id="dialog-message"
-                style="color: rgba(255,255,255,0.75); margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.5; word-break: break-all;">
-            </p>
-            <input type="password" id="dialog-input" class="custom-input"
-                style="text-align: center; letter-spacing: 2px; margin-bottom: 1.5rem;" autocomplete="off">
-            <div class="modal-actions" style="justify-content: center; gap: 1rem;">
-                <button class="btn-cancel" id="dialog-cancel" style="flex: 1;">取消</button>
-                <button class="btn-confirm" id="dialog-confirm" style="flex: 1;">确认</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Modal -->
-    <div id="add-modal" class="modal-overlay">
-        <div class="modal-box">
-            <h3 id="modal-title">添加新内容</h3>
-            <input type="text" id="modal-input-title" class="custom-input" placeholder="名称 / 标题...">
-            <input type="text" id="modal-input-bg" class="custom-input" placeholder="封面大图链接 (选填，如 bg-dark.png)...">
-            <input type="text" id="modal-input-download" class="custom-input" placeholder="下载链接 (仅软件分享, 如 downloads/software.exe)..." style="display: none;">
-            <input type="text" id="modal-input-note" class="custom-input" placeholder="笔记文件链接 (仅学习笔记, 如 notes/python.md)..." style="display: none;">
-            <select id="modal-input-rating" class="custom-input" style="display: none;">
-                <option value="5">⭐⭐⭐⭐⭐ 神仙极品 (5星)</option>
-                <option value="4">⭐⭐⭐⭐ 强力推荐 (4星)</option>
-                <option value="3">⭐⭐⭐ 值得一试 (3星)</option>
-                <option value="2">⭐⭐ 表现平平 (2星)</option>
-                <option value="1">⭐ 避坑不推 (1星)</option>
-            </select>
-            <textarea id="modal-input-desc" class="custom-input" rows="4" placeholder="写下你的点评或描述内容..."></textarea>
-
-            <!-- Live Preview -->
-            <div class="preview-title-label">✨ 实时发布效果预览：</div>
-            <div id="modal-preview-area" class="modal-preview-area"></div>
-
-            <div class="modal-actions">
-                <button id="modal-cancel" class="btn-cancel">取消</button>
-                <button id="modal-confirm" class="btn-confirm">确定发布</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Script -->
     <script src="script.js"></script>
 </body>
 
