@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jasmine - Developer & Dreamer</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -33,66 +33,131 @@
         <source src="https://music.163.com/song/media/outer/url?id=103027.mp3" type="audio/mpeg">
     </audio>
 
+    <nav class="glass-nav">
+        <div class="nav-brand">Jasmine</div>
+        <div class="nav-links">
+            <a href="#home" class="nav-link active" data-section="home">主页</a>
+            <a href="#projects" class="nav-link" data-section="projects">项目作品</a>
+            <a href="#notes" class="nav-link" data-section="notes">学习笔记</a>
+            <a href="#diary" class="nav-link" data-section="diary">生活日记</a>
+            <a href="#software" class="nav-link" data-section="software">软件分享</a>
+        </div>
+        <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+    </nav>
+
     <div class="glass-card">
         <main class="main-container">
+
+            <!-- ──── Home ──── -->
             <section id="home" class="nav-section active">
                 <div class="profile-content">
                     <div class="avatar-wrapper">
                         <img src="images/avatar.jpg?v=2" onerror="this.onerror=null; this.src='images/avatar1.png?v=2';" alt="Jasmine Avatar" class="avatar">
                         <div class="status-dot"></div>
                     </div>
-
                     <h1 class="name">Jasmine</h1>
                     <h2 class="subtitle">Developer & Dreamer</h2>
-
                     <p class="quote">"You are my dream of gain and loss, and I am dispensable to you."</p>
-
                     <div class="social-links">
-                        <a href="https://github.com/Ryker-Zhong" target="_blank" class="social-icon" title="GitHub">
-                            <i class="fa-brands fa-github"></i>
-                        </a>
-                        <a href="javascript:void(0)" class="social-icon qr-trigger" title="WeChat">
-                            <i class="fa-brands fa-weixin"></i>
-                            <img src="images/wechat.jpg" alt="WeChat QR" class="qr-popup">
-                        </a>
-                        <a href="javascript:void(0)" class="social-icon qr-trigger" title="QQ">
-                            <i class="fa-brands fa-qq"></i>
-                            <img src="images/qq.jpg" alt="QQ QR" class="qr-popup">
-                        </a>
-                        <a href="#" id="email-icon-link" class="social-icon" title="Email">
-                            <i class="fa-regular fa-envelope"></i>
-                        </a>
+                        <a href="https://github.com/Ryker-Zhong" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                        <a href="javascript:void(0)" class="social-icon qr-trigger" title="WeChat"><i class="fa-brands fa-weixin"></i><img src="images/wechat.jpg" alt="WeChat QR" class="qr-popup"></a>
+                        <a href="javascript:void(0)" class="social-icon qr-trigger" title="QQ"><i class="fa-brands fa-qq"></i><img src="images/qq.jpg" alt="QQ QR" class="qr-popup"></a>
+                        <a href="#" id="email-icon-link" class="social-icon" title="Email"><i class="fa-regular fa-envelope"></i></a>
                     </div>
                 </div>
             </section>
+
+            <!-- ──── Projects ──── -->
+            <section id="projects" class="nav-section">
+                <h2 class="section-title"><i class="fa-solid fa-code"></i> 项目作品</h2>
+                <div class="section-subtitle">开源项目 & 个人作品</div>
+                <div class="card-grid" id="projectsGrid"></div>
+            </section>
+
+            <!-- ──── Notes ──── -->
+            <section id="notes" class="nav-section">
+                <h2 class="section-title"><i class="fa-solid fa-book-open"></i> 学习笔记</h2>
+                <div class="section-subtitle">知识沉淀 & 学习记录</div>
+                <div class="notes-toolbar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="notesSearch" placeholder="搜索笔记关键词...">
+                    </div>
+                    <div class="filter-tags" id="notesFilter"></div>
+                </div>
+                <div class="card-grid" id="notesGrid"></div>
+            </section>
+
+            <!-- ──── Diary ──── -->
+            <section id="diary" class="nav-section">
+                <h2 class="section-title"><i class="fa-solid fa-pen-fancy"></i> 生活日记</h2>
+                <div class="section-subtitle">记录生活点滴</div>
+                <div class="timeline" id="diaryTimeline"></div>
+            </section>
+
+            <!-- ──── Software ──── -->
+            <section id="software" class="nav-section">
+                <h2 class="section-title"><i class="fa-solid fa-download"></i> 软件分享</h2>
+                <div class="section-subtitle">精选高效开发者工具与实用软件</div>
+                <div class="card-grid" id="softwareGrid"></div>
+
+                <h3 class="sub-section-title"><i class="fa-solid fa-table-list"></i> 软件下载索引</h3>
+                <div class="download-table-wrapper">
+                    <table class="download-table">
+                        <thead>
+                            <tr><th>软件</th><th>下载方式 / 链接</th><th>备注</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>HiBit Uninstaller</td><td><a href="http://www.hibitsoft.ir/Uninstaller.html" target="_blank">官方网站</a></td><td>免费强大的卸载工具</td></tr>
+                            <tr><td>PixPin</td><td><a href="https://pixpinapp.com/" target="_blank">官方网站</a></td><td>截图/贴图/长截图/GIF/OCR</td></tr>
+                            <tr><td>Xftp</td><td><a href="https://www.xftp.com/" target="_blank">官方网站</a></td><td>强大的 SFTP/FTP 客户端</td></tr>
+                            <tr><td>NoMachine</td><td><a href="https://www.nomachine.com/" target="_blank">官方网站</a></td><td>高性能远程桌面软件</td></tr>
+                            <tr><td>WinRAR</td><td><a href="https://www.winrar.com/" target="_blank">官方网站</a></td><td>知名压缩/解压工具</td></tr>
+                            <tr><td>Obsidian</td><td><a href="https://obsidian.md/" target="_blank">官方网站</a></td><td>强大知识库笔记工具</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="download-tip"><i class="fa-solid fa-shield-halved"></i> 请优先选择官方网站下载，获取安全、最新版本。</p>
+            </section>
+
         </main>
 
         <footer class="footer">
-            赣ICP备2026005556号
-           © 2026-2029 JASMINE-ZHONG
+            赣ICP备2026005556号 &nbsp;|&nbsp; &copy; 2026-2029 JASMINE-ZHONG
         </footer>
     </div>
 
+    <!-- ──── Email Modal ──── -->
     <div id="email-modal" class="modal-overlay">
         <div class="modal-box email-box">
-            <h3 class="modal-title" style="text-align: center; margin-bottom: -0.5rem;">
-                <i class="fa-solid fa-envelope-open-text"></i> 联系邮箱
-            </h3>
-            <div class="email-display">
-                <span id="email-text">3127737156@qq.com</span>
-            </div>
-            <p class="email-desc" style="text-align: center;">期待与您的交流，您可以点击下方按钮立刻复制此邮箱地址！</p>
-            <div class="modal-actions" style="justify-content: center; margin-top: 1rem; gap: 1rem;">
-                <button class="btn-cancel" id="close-email-btn" style="flex: 1;">关闭</button>
-                <button id="copy-email-btn" class="btn-confirm"
-                    style="flex: 1.5; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">
-                    <i class="fa-regular fa-copy"></i> 复制地址
-                </button>
+            <h3 class="modal-title"><i class="fa-solid fa-envelope-open-text"></i> 联系邮箱</h3>
+            <div class="email-display"><span id="email-text">3127737156@qq.com</span></div>
+            <p class="email-desc">期待与您的交流，点击下方按钮复制邮箱地址！</p>
+            <div class="modal-actions" style="justify-content:center;gap:1rem">
+                <button class="btn-cancel" id="close-email-btn" style="flex:1">关闭</button>
+                <button id="copy-email-btn" class="btn-confirm" style="flex:1.5">&#128203; 复制地址</button>
             </div>
         </div>
     </div>
 
-    <script src="script.js?v=2"></script>
-</body>
+    <!-- ──── Reading Modal ──── -->
+    <div id="reading-modal" class="modal-overlay">
+        <div class="modal-box reading-box">
+            <button class="modal-close" id="readingClose">&times;</button>
+            <h3 class="modal-title" id="readingTitle"></h3>
+            <div class="reading-content" id="readingContent"></div>
+            <div class="reading-footer">
+                <button class="btn-like" id="readingLike"><i class="fa-regular fa-heart"></i> <span id="readingLikeCount">0</span></button>
+            </div>
+        </div>
+    </div>
 
+    <!-- ──── Lightbox ──── -->
+    <div id="lightbox" class="modal-overlay">
+        <button class="modal-close" id="lightboxClose">&times;</button>
+        <img id="lightboxImg" src="" alt="preview">
+    </div>
+
+    <script src="script.js?v=3"></script>
+</body>
 </html>
