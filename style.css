@@ -228,7 +228,7 @@ body.bg-starry {
 /* ─── Home ─── */
 #home.nav-section {
     justify-content: center;
-    padding-top: 5rem;
+    min-height: 75vh;
 }
 .profile-content {
     display: flex;
@@ -236,6 +236,8 @@ body.bg-starry {
     align-items: center;
     text-align: center;
 }
+
+/* Avatar breathing glow ring */
 .avatar-wrapper {
     position: relative;
     width: 120px; height: 120px;
@@ -246,7 +248,22 @@ body.bg-starry {
     margin-bottom: 1.2rem;
     box-shadow: 0 0 30px rgba(255,255,255,0.08);
 }
+.avatar-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.4), transparent, rgba(147,197,253,0.4), transparent);
+    animation: ringSpin 3s linear infinite;
+    mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #fff calc(100% - 2px));
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #fff calc(100% - 2px));
+}
+@keyframes ringSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 .avatar {
+    position: relative;
+    z-index: 1;
     width: 100%; height: 100%;
     border-radius: 50%;
     object-fit: cover;
@@ -265,50 +282,69 @@ body.bg-starry {
     border: 3px solid #1e293b;
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(16,185,129,0.4);
+    z-index: 2;
     animation: pulseGlow 2s infinite;
 }
 .name {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     font-weight: 700;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.3rem;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
 }
 .subtitle {
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 400;
     color: rgba(255,255,255,0.85);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     letter-spacing: 1.5px;
+}
+
+/* Quote glass card */
+.quote-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 1rem 1.6rem;
+    margin-bottom: 1.8rem;
+    max-width: 440px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
 }
 .quote {
     font-style: italic;
-    color: rgba(255,255,255,0.95);
+    color: rgba(255,255,255,0.92);
     font-size: 0.9rem;
-    max-width: 420px;
-    line-height: 1.6;
-    margin-bottom: 2rem;
+    line-height: 1.7;
     text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    margin: 0;
 }
-.social-links { display: flex; gap: 1rem; }
+
+/* Glass social buttons */
+.social-links { display: flex; gap: 0.9rem; }
 .social-icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 42px; height: 42px;
+    width: 44px; height: 44px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.08);
     color: white;
     text-decoration: none;
-    font-size: 1rem;
-    border: 1px solid rgba(255,255,255,0.2);
-    transition: all 0.3s ease;
+    font-size: 1.05rem;
     position: relative;
+    transition: all 0.3s ease;
 }
-.social-icon:hover {
-    background: rgba(255,255,255,0.25);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    border-color: rgba(255,255,255,0.4);
+.glass-btn {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.glass-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    border-color: rgba(255,255,255,0.35);
 }
 .qr-popup {
     position: absolute;
