@@ -229,13 +229,87 @@ document.addEventListener('DOMContentLoaded', () => {
     let isEditing = false;
     let editIndex = -1;
 
-    const defaultProjects = [];
+    const defaultProjects = [
+        {
+            title: '🌐 Jasmine 个人网站',
+            desc: '现代化个人网站，采用玻璃毛玻璃设计，支持深色/浅色主题切换、内容管理系统、粒子背景动画等功能。',
+            bg: 'linear-gradient(135deg, rgba(99,102,241,0.8) 0%, rgba(139,92,246,0.8) 100%)',
+            rating: 5
+        },
+        {
+            title: '📘 JXUT-BST 官网',
+            desc: '蓝色技术工作室官网，使用 VitePress 构建。采用 Vue + TypeScript 技术栈，提供完整的文档和项目展示平台。',
+            bg: 'linear-gradient(135deg, rgba(30,144,255,0.8) 0%, rgba(0,191,255,0.8) 100%)',
+            rating: 5
+        },
+        {
+            title: '📝 心流笔记 App',
+            desc: '兼具记笔记和复盘功能的应用。帮助用户记录学习过程中的心流状态，支持知识复盘和回顾功能。',
+            bg: 'linear-gradient(135deg, rgba(34,197,94,0.8) 0%, rgba(16,185,129,0.8) 100%)',
+            rating: 4
+        },
+        {
+            title: '🤖 Raicom Intelli Scout',
+            desc: '智能侦查系统项目，结合机器人技术和AI算法，用于数据分析和智能决策支持。',
+            bg: 'linear-gradient(135deg, rgba(244,114,182,0.8) 0%, rgba(168,85,247,0.8) 100%)',
+            rating: 5
+        },
+        {
+            title: '👨‍💻 Ryker-Zhong 个人档案',
+            desc: '个人档案库，展示技术栈和开源贡献。专注于机器人技术、嵌入式系统和前端可视化开发。',
+            bg: 'linear-gradient(135deg, rgba(251,146,60,0.8) 0%, rgba(249,115,22,0.8) 100%)',
+            rating: 5
+        }
+    ];
 
     const defaultNotes = [];
 
     const defaultDiary = [];
 
-    const defaultSoftware = [];
+    const defaultSoftware = [
+        {
+            title: '🧠 Obsidian - 知识管理工具',
+            desc: '强大的笔记和知识管理应用，支持双向链接、图谱视图、插件系统。完美用于个人知识库、研究笔记、文献管理等场景。',
+            downloadUrl: 'downloads/Obsidian-1.8.10.exe',
+            rating: 5
+        },
+        {
+            title: '🛠️ HiBit Uninstaller - 卸载工具',
+            desc: '专业软件卸载工具，可彻底删除程序残留文件和注册表项。比Windows自带卸载工具更深度和有效。',
+            downloadUrl: 'downloads/HiBitUninstaller-setup-3.2.55.exe',
+            rating: 5
+        },
+        {
+            title: '🖥️ NoMachine - 远程桌面',
+            desc: '免费高效的远程桌面软件，支持远程访问和控制。适合远程办公、技术支持、文件传输等场景。',
+            downloadUrl: 'downloads/nomachine_9.2.18_1_x64.exe',
+            rating: 5
+        },
+        {
+            title: '🎨 PixPin - 截图工具',
+            desc: '现代化的截图和标注工具，支持滚动截图、贴图、标记等功能。界面美观，操作快速高效。',
+            downloadUrl: 'downloads/PixPin_cn_zh-cn_2.2.4.1.exe',
+            rating: 5
+        },
+        {
+            title: '⚡ PowerToys - 系统增强工具',
+            desc: 'Microsoft官方出品的Windows系统增强工具集。包含快速查看、文件批量重命名、窗口管理等功能。',
+            downloadUrl: 'downloads/PowerToysUserSetup-0.96.0-x64.exe',
+            rating: 5
+        },
+        {
+            title: '📦 WinRAR - 压缩工具',
+            desc: '业界标准的压缩和解压软件，支持RAR、ZIP等多种格式。稳定可靠，功能全面强大。',
+            downloadUrl: 'downloads/winrar-x64-700scp.exe',
+            rating: 5
+        },
+        {
+            title: '📡 Xftp - 文件传输',
+            desc: '专业的SFTP/FTP文件传输工具，安全高效。适合与远程服务器传输文件。',
+            downloadUrl: 'downloads/Xftp-8.0.0082p.exe',
+            rating: 5
+        }
+    ];
 
     const defaultSecret = [];
 
@@ -257,7 +331,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (item.bg) {
                 card.classList.add('has-bg');
-                card.style.backgroundImage = `url(${item.bg})`;
+                // 支持 URL 和 gradient
+                if (item.bg.includes('url(') || item.bg.includes('http')) {
+                    card.style.backgroundImage = `url(${item.bg})`;
+                } else {
+                    card.style.background = item.bg;
+                }
             }
             
             let ratingHtml = '';
@@ -266,10 +345,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 ratingHtml = `<div class="rating-stars">${'★'.repeat(num)}${'☆'.repeat(5-num)}</div>`;
             }
             
+            let downloadBtnHtml = '';
+            if (typeString === 'software' && item.downloadUrl) {
+                downloadBtnHtml = `<a href="${item.downloadUrl}" class="download-btn" title="下载" download><i class="fa-solid fa-download"></i> 下载</a>`;
+            }
+            
             card.innerHTML = `
                 <h3>${item.title}</h3>
                 ${ratingHtml}
                 <p>${item.desc}</p>
+                ${downloadBtnHtml}
                 <button class="edit-btn" data-index="${index}" title="编辑"><i class="fa-solid fa-pen"></i></button>
                 <button class="delete-btn" data-index="${index}" title="删除"><i class="fa-solid fa-trash"></i></button>
             `;
@@ -353,9 +438,11 @@ document.addEventListener('DOMContentLoaded', () => {
         editIndex = index;
         
         const inputBg = document.getElementById('modal-input-bg');
+        const inputDownload = document.getElementById('modal-input-download');
 
         inputDesc.style.display = 'block';
         if (inputRating) inputRating.style.display = 'block';
+        if (inputDownload) inputDownload.style.display = 'none';
 
         if (type === 'project') {
             modalTitle.textContent = editing ? '编辑项目作品' : '发布新项目作品';
@@ -363,6 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalTitle.textContent = editing ? '编辑生活日记' : '写下新日记';
         } else if (type === 'software') {
             modalTitle.textContent = editing ? '编辑工具点评' : '发布新点评';
+            if (inputDownload) inputDownload.style.display = 'block';
         } else if (type === 'note') {
             modalTitle.textContent = editing ? '编辑学习笔记' : '发布新笔记';
         } else if (type === 'secret') {
@@ -373,11 +461,13 @@ document.addEventListener('DOMContentLoaded', () => {
             inputTitle.value = itemData.title || '';
             inputDesc.value = itemData.desc || '';
             if (inputBg) inputBg.value = itemData.bg || '';
+            if (inputDownload) inputDownload.value = itemData.downloadUrl || '';
             if (inputRating && itemData.rating) inputRating.value = itemData.rating; else if (inputRating) inputRating.value = '5';
         } else {
             inputTitle.value = '';
             inputDesc.value = '';
             if (inputBg) inputBg.value = '';
+            if (inputDownload) inputDownload.value = '';
             if (inputRating) inputRating.value = '5';
         }
         
@@ -400,7 +490,12 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.add('item-card');
         if (bg) {
             card.classList.add('has-bg');
-            card.style.backgroundImage = `url(${bg})`;
+            // 支持 URL 和 gradient
+            if (bg.includes('url(') || bg.includes('http')) {
+                card.style.backgroundImage = `url(${bg})`;
+            } else {
+                card.style.background = bg;
+            }
         }
         
         const ratingHtml = `<div class="rating-stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>`;
@@ -443,7 +538,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = inputTitle.value.trim();
         const desc = inputDesc.value.trim();
         const inputBg = document.getElementById('modal-input-bg');
+        const inputDownload = document.getElementById('modal-input-download');
         const bg = inputBg ? inputBg.value.trim() : '';
+        const downloadUrl = inputDownload ? inputDownload.value.trim() : '';
         const rating = (inputRating && inputRating.style.display !== 'none') ? inputRating.value : '5';
 
         if (!title) {
@@ -454,6 +551,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let storeKey = '';
         let defaultData = [];
         const itemPayload = { title, desc, bg, rating };
+        
+        // 软件类型添加下载链接
+        if (currentAddType === 'software' && downloadUrl) {
+            itemPayload.downloadUrl = downloadUrl;
+        }
 
         if (currentAddType === 'project') {
             storeKey = 'customProjects';
