@@ -31,6 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
         else { icon.className = 'fa-solid fa-music'; text.textContent = '播放音乐'; musicToggle.style.color = ''; }
     });
 
+    // ────────── Top Modules ──────────
+    document.querySelectorAll('.module-item').forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelectorAll('.module-item').forEach(m => m.classList.remove('active'));
+            item.classList.add('active');
+        });
+    });
+
     // ────────── Particles ──────────
     const container = document.getElementById('particles-container');
     if (container) {
