@@ -313,4 +313,79 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('');
   }
   renderSoftware();
+
+  // ────────── Debug (Ctrl+Shift+D) ──────────
+  let debugLogs = [];
+  const _origError = console.error;
+  console.error = (...args) => { debugLogs.push(args.join(' ')); _origError.apply(console, args); };
+
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+      e.preventDefault();
+      toggleDebugPanel();
+    }
+  });
+
+  function toggleDebugPanel() {
+    let panel = document.getElementById('debugPanel');
+    if (panel) { panel.remove(); return; }
+
+    panel = document.createElement('div');
+    panel.id = 'debugPanel';
+    panel.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong style="font-size:13px">⚙ Debug</strong>
+        <span id="debugClose" style="cursor:pointer;font-size:16px;opacity:.6">&times;</span>
+      </div>
+      <div id="debugBody"></div>
+    `;
+    Object.assign(panel.style, {
+      position:'fixed', bottom:'16px', right:'16px', zIndex:9999,
+      background:'rgba(0,0,0,0.85)', backdropFilter:'blur(12px)',
+      border:'1px solid rgba(255,255,255,0.12)', borderRadius:'12px',
+      padding:'12px 16px', maxWidth:'380px', maxHeight:'50vh',
+      overflow:'auto', fontFamily:'monospace', fontSize:'12px',
+      color:'rgba(255,255,255,0.85)', lineHeight:'1.6'
+    });
+    document.body.appendChild(panel);
+    document.getElementById('debugClose').onclick = () => panel.remove();
+
+    refreshDebugBody();
+    panel.addEventListener('click', (e) => {
+      if (e.target.id === 'debugRefresh') refreshDebugBody();
+    });
+  }
+
+  async function refreshDebugBody() {
+    const body = document.getElementById('debugBody');
+    if (!body) return;
+    const likes = JSON.parse(localStorage.getItem('notesLikes') || '{}');
+    let projectsCount = '?', notesCount = '?', diaryCount = '?', softwareCount = '?';
+    try {
+      const [p, n, d, s] = await Promise.all([
+        fetch('data/projects.json').then(r => r.json()),
+        fetch('data/notes.json').then(r => r.json()),
+        fetch('data/diary.json').then(r => r.json()),
+        fetch('data/software.json').then(r => r.json())
+      ]);
+      projectsCount = p.length; notesCount = n.length; diaryCount = d.length; softwareCount = s.length;
+    } catch {}
+    body.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:8px">
+        <span>projects.json</span><span style="text-align:right;color:#60a5fa">${projectsCount} items</span>
+        <span>notes.json</span><span style="text-align:right;color:#60a5fa">${notesCount} items</span>
+        <span>diary.json</span><span style="text-align:right;color:#60a5fa">${diaryCount} items</span>
+        <span>software.json</span><span style="text-align:right;color:#60a5fa">${softwareCount} items</span>
+        <span>likes (localStorage)</span><span style="text-align:right;color:#f472b6">${Object.keys(likes).length} items</span>
+        <span>console errors</span><span style="text-align:right;color:#f87171">${debugLogs.length}</span>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:6px;display:flex;gap:6px">
+        <button id="debugRefresh" style="flex:1;padding:4px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;background:transparent;color:rgba(255,255,255,0.6);cursor:pointer;font-size:11px;font-family:inherit">⟳ Refresh</button>
+        <button id="debugClearLikes" style="flex:1;padding:4px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;background:transparent;color:#f87171;cursor:pointer;font-size:11px;font-family:inherit">✕ Clear Likes</button>
+      </div>
+    `;
+    document.getElementById('debugClearLikes')?.addEventListener('click', () => {
+      if (confirm('Clear all likes data?')) { localStorage.removeItem('notesLikes'); notesLikes = {}; refreshDebugBody(); renderNotesGrid(); }
+    });
+  }
 });
