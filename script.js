@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isEditing = false;
     let editIndex = -1;
 
-    const defaultProjects = [
+    const hardcodedProjects = [
         {
             title: '🌐 Jasmine 个人网站',
             desc: '现代化个人网站，采用玻璃毛玻璃设计，支持深色/浅色主题切换、内容管理系统、粒子背景动画等功能。',
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    const defaultNotes = [
+    const hardcodedNotes = [
         {
             title: '🕉️ 佛教史',
             desc: '系统学习佛教的起源、发展、传播等内容。包含佛教的黄金时代、中心转移、消长变化等重要历史阶段。',
@@ -279,9 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    const defaultDiary = [];
+    const hardcodedDiary = [];
 
-    const defaultSoftware = [
+    const hardcodedSoftware = [
         {
             title: '📄 下载说明',
             desc: '网站中的下载入口说明，使用本地下载说明文档查看当前可用资源。',
@@ -302,7 +302,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    const defaultSecret = [];
+    const hardcodedSecret = [];
+
+    let defaultProjects = [...hardcodedProjects];
+    let defaultNotes = [...hardcodedNotes];
+    let defaultSoftware = [...hardcodedSoftware];
+    let defaultDiary = [...hardcodedDiary];
+    let defaultSecret = [...hardcodedSecret];
+
+    async function loadServerDefaults() {
+        try {
+            const r = await fetch('data/projects.json?v=' + Date.now());
+            if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length) defaultProjects = d; }
+        } catch (e) {}
+        try {
+            const r = await fetch('data/notes.json?v=' + Date.now());
+            if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length) defaultNotes = d; }
+        } catch (e) {}
+        try {
+            const r = await fetch('data/software.json?v=' + Date.now());
+            if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length) defaultSoftware = d; }
+        } catch (e) {}
+    }
 
     function getStoredData(key, defaultData) {
         const data = localStorage.getItem(key);
@@ -410,8 +431,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCards(secretGrid, 'customSecret', getStoredData('customSecret', defaultSecret), '密信', 'secret');
     }
 
-    // Initialize loaded items
-    renderAll();
+    // Initialize loaded items (async: load server data first)
+    (async () => {
+        await loadServerDefaults();
+        renderAll();
+    })();
 
     // --- Admin Mode Easter Egg ---
     const avatar = document.querySelector('.avatar');
