@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Custom UI Dialog System (Replaces alert/prompt/confirm) ---
+    // ────────── Dialog System ──────────
     const dialogModal = document.getElementById('dialog-modal');
     const dialogTitle = document.getElementById('dialog-title');
     const dialogMessage = document.getElementById('dialog-message');
@@ -11,163 +11,73 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Promise((resolve) => {
             dialogTitle.innerHTML = options.title || '<i class="fa-solid fa-circle-info"></i> 提示';
             dialogMessage.innerHTML = options.message || '';
-            
-            if (options.type === 'prompt') {
-                dialogInput.style.display = 'block';
-                dialogInput.value = '';
-                dialogInput.onkeydown = (e) => { if (e.key === 'Enter') handleConfirm(); };
-            } else {
-                dialogInput.style.display = 'none';
-                dialogInput.onkeydown = null;
-            }
-
-            if (options.hideCancel) {
-                btnDialogCancel.style.display = 'none';
-            } else {
-                btnDialogCancel.style.display = 'block';
-            }
-
+            dialogInput.style.display = options.type === 'prompt' ? 'block' : 'none';
+            dialogInput.value = '';
+            btnDialogCancel.style.display = options.hideCancel ? 'none' : 'block';
             dialogModal.classList.add('show');
             if (options.type === 'prompt') setTimeout(() => dialogInput.focus(), 100);
 
-            const handleConfirm = () => {
-                cleanup();
-                resolve(options.type === 'prompt' ? dialogInput.value.trim() : true);
-            };
-
-            const handleCancel = () => {
-                cleanup();
-                resolve(null);
-            };
-
-            const cleanup = () => {
+            const cleanup = (result) => {
                 dialogModal.classList.remove('show');
-                btnDialogConfirm.removeEventListener('click', handleConfirm);
-                btnDialogCancel.removeEventListener('click', handleCancel);
+                btnDialogConfirm.removeEventListener('click', onConfirm);
+                btnDialogCancel.removeEventListener('click', onCancel);
+                resolve(result);
             };
-
-            btnDialogConfirm.addEventListener('click', handleConfirm);
-            btnDialogCancel.addEventListener('click', handleCancel);
+            const onConfirm = () => cleanup(options.type === 'prompt' ? dialogInput.value.trim() : true);
+            const onCancel = () => cleanup(null);
+            btnDialogConfirm.addEventListener('click', onConfirm);
+            btnDialogCancel.addEventListener('click', onCancel);
+            if (options.type === 'prompt') dialogInput.onkeydown = (e) => { if (e.key === 'Enter') onConfirm(); };
         });
     }
 
+    // ────────── Settings ──────────
     const settingsToggle = document.getElementById('settingsToggle');
     const settingsMenu = document.getElementById('settingsMenu');
     const themeToggle = document.getElementById('themeToggle');
     const musicToggle = document.getElementById('musicToggle');
     const bgMusic = document.getElementById('bgMusic');
+    let isLightMode = false, isPlaying = false;
+    bgMusic.volume = 0.3;
 
-    // Toggle Settings Menu
-    settingsToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        settingsMenu.classList.toggle('show');
-    });
+    settingsToggle.addEventListener('click', (e) => { e.stopPropagation(); settingsMenu.classList.toggle('show'); });
+    document.addEventListener('click', (e) => { if (!settingsToggle.contains(e.target) && !settingsMenu.contains(e.target)) settingsMenu.classList.remove('show'); });
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!settingsToggle.contains(e.target) && !settingsMenu.contains(e.target)) {
-            settingsMenu.classList.remove('show');
-        }
-    });
-
-    // Theme Toggle Logic
-    let isLightMode = false;
     themeToggle.addEventListener('click', () => {
         isLightMode = !isLightMode;
         document.body.classList.toggle('light-mode', isLightMode);
-        
-        // Update Icon and Text
         const icon = themeToggle.querySelector('i');
         const text = themeToggle.querySelector('span');
-        
-        if (isLightMode) {
-            icon.classList.replace('fa-moon', 'fa-sun');
-            text.textContent = '白天模式';
-        } else {
-            icon.classList.replace('fa-sun', 'fa-moon');
-            text.textContent = '夜间模式';
-        }
+        if (isLightMode) { icon.classList.replace('fa-moon', 'fa-sun'); text.textContent = '白天模式'; }
+        else { icon.classList.replace('fa-sun', 'fa-moon'); text.textContent = '夜间模式'; }
     });
-
-    // Music Toggle Logic
-    let isPlaying = false;
-    
-    // Set volume to reasonable level
-    bgMusic.volume = 0.3;
 
     musicToggle.addEventListener('click', () => {
-        if (isPlaying) {
-            bgMusic.pause();
-            isPlaying = false;
-        } else {
-            // Browsers may block autoplay without user interaction, but since this is tied to a click event it will work
-            bgMusic.play().catch(error => {
-                console.error('Audio play failed:', error);
-            });
-            isPlaying = true;
-        }
-        
+        if (isPlaying) { bgMusic.pause(); isPlaying = false; }
+        else { bgMusic.play().catch(console.error); isPlaying = true; }
         const icon = musicToggle.querySelector('i');
         const text = musicToggle.querySelector('span');
-        
-        if (isPlaying) {
-            icon.classList.replace('fa-music', 'fa-pause');
-            text.textContent = '暂停音乐';
-            // Optional: highlight the text/icon
-            musicToggle.style.color = '#10b981';
-        } else {
-            icon.classList.replace('fa-pause', 'fa-music');
-            text.textContent = '播放音乐';
-            musicToggle.style.color = '';
-        }
+        if (isPlaying) { icon.classList.replace('fa-music', 'fa-pause'); text.textContent = '暂停音乐'; musicToggle.style.color = '#10b981'; }
+        else { icon.classList.replace('fa-pause', 'fa-music'); text.textContent = '播放音乐'; musicToggle.style.color = ''; }
     });
 
-    // --- Dynamic Background Particles ---
+    // ────────── Particles ──────────
     const particlesContainer = document.getElementById('particles-container');
     if (particlesContainer) {
-        const particleCount = 40;
-
-        for (let i = 0; i < particleCount; i++) {
-            createParticle();
-        }
-
+        for (let i = 0; i < 40; i++) createParticle();
         function createParticle() {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            
-            // Randomize size between 2px and 5px
-            const size = Math.random() * 3 + 2;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            
-            // Randomize horizontal position (0 to 100%)
-            particle.style.left = `${Math.random() * 100}vw`;
-            
-            // Randomize animation duration (8s to 20s)
-            const duration = Math.random() * 12 + 8;
-            particle.style.animationDuration = `${duration}s`;
-            
-            // Randomize animation delay (0s to 12s)
-            particle.style.animationDelay = `${Math.random() * 12}s`;
-            
-            // Add horizontal drift
-            const drift = (Math.random() - 0.5) * 60;
-            particle.style.transform = `translateX(${drift}px)`;
-            
-            particlesContainer.appendChild(particle);
-            
-            // Allow particle to respawn when animation finishes
-            particle.addEventListener('animationend', () => {
-                particle.remove();
-                createParticle();
-            });
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            const s = Math.random() * 3 + 2;
+            p.style.cssText = `width:${s}px;height:${s}px;left:${Math.random()*100}vw;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*12}s;transform:translateX(${(Math.random()-0.5)*60}px)`;
+            particlesContainer.appendChild(p);
+            p.addEventListener('animationend', () => { p.remove(); createParticle(); });
         }
     }
 
-    // --- Navigation Tabs Logic ---
+    // ────────── Navigation ──────────
     const navLinks = document.querySelectorAll('#nav-tabs a');
     const navSections = document.querySelectorAll('.nav-section');
-    
     let isSecretUnlocked = false;
 
     navLinks.forEach(link => {
@@ -177,613 +87,354 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!targetId) return;
 
             if (targetId === 'secret' && !isSecretUnlocked) {
-                const pwd = await showDialog({
-                    title: '<i class="fa-solid fa-lock"></i> 私密空间',
-                    message: '进入秘密小屋需要通行黑卡。<br><span style="font-size:0.85rem; color: rgba(255,255,255,0.5);">(提示：一种酸甜可口的水果拼音)</span>',
-                    type: 'prompt'
-                });
-                if (pwd === "youzi") {
-                    isSecretUnlocked = true;
-                    await showDialog({ title: '✅ 认证成功', message: '权限已解禁，欢迎踏入属于你的绝对安全屋片段。', hideCancel: true });
-                } else {
-                    if (pwd !== null) await showDialog({ title: '❌ 认证被拒', message: '口令错误，已被拦截机制阻挡在外。', hideCancel: true });
-                    return; // Abort tab switch
-                }
+                const pwd = await showDialog({ title: '<i class="fa-solid fa-lock"></i> 私密空间', message: '进入秘密小屋需要通行黑卡。<br><span style="font-size:0.85rem; color: rgba(255,255,255,0.5);">(提示：一种酸甜可口的水果拼音)</span>', type: 'prompt' });
+                if (pwd === "youzi") { isSecretUnlocked = true; await showDialog({ title: '✅ 认证成功', message: '权限已解禁，欢迎踏入属于你的绝对安全屋片段。', hideCancel: true }); }
+                else { if (pwd !== null) await showDialog({ title: '❌ 认证被拒', message: '口令错误，已被拦截机制阻挡在外。', hideCancel: true }); return; }
             }
 
-            // Remove active class from all nav items
             document.querySelectorAll('#nav-tabs li').forEach(li => li.classList.remove('active'));
-            // Add active class to clicked item
             link.parentElement.classList.add('active');
-
-            // Hide all sections
-            navSections.forEach(section => {
-                section.classList.remove('active');
-            });
-
-            // Show target section
-            const targetSection = document.getElementById(targetId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-            }
+            navSections.forEach(s => s.classList.remove('active'));
+            const ts = document.getElementById(targetId);
+            if (ts) ts.classList.add('active');
         });
     });
 
-    // --- Custom Add/Edit (Mini-CMS) Logic ---
+    // ────────── Data Layer ──────────
+    const VERSION = '3.0';
+    const API = {
+        projects: 'data/projects.json',
+        notes: 'data/notes.json',
+        software: 'data/software.json'
+    };
+
+    let serverData = { projects: [], notes: [], software: [] };
+
+    async function fetchJSON(url) {
+        const r = await fetch(url + '?v=' + Date.now());
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const d = await r.json();
+        return Array.isArray(d) ? d : [];
+    }
+
+    async function loadServerData() {
+        const results = await Promise.allSettled([
+            fetchJSON(API.projects).then(d => serverData.projects = d),
+            fetchJSON(API.notes).then(d => serverData.notes = d),
+            fetchJSON(API.software).then(d => serverData.software = d)
+        ]);
+    }
+
+    function loadFromStorage(key) {
+        try { const d = localStorage.getItem(key); return d ? JSON.parse(d) : []; }
+        catch { return []; }
+    }
+
+    function saveToStorage(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function getAllItems(type) {
+        const server = [...serverData[type]];
+        const user = loadFromStorage('user_' + type);
+        return [...server, ...user];
+    }
+
+    // Track which items belong to user vs server
+    function isUserItem(type, index) {
+        const serverLen = serverData[type].length;
+        return index >= serverLen;
+    }
+
+    function getItemSource(type, index) {
+        const serverLen = serverData[type].length;
+        if (index < serverLen) return { source: 'server', localIndex: index };
+        return { source: 'user', localIndex: index - serverLen };
+    }
+
+    function removeItem(type, combinedIndex) {
+        const info = getItemSource(type, combinedIndex);
+        if (info.source === 'user') {
+            const items = loadFromStorage('user_' + type);
+            items.splice(info.localIndex, 1);
+            saveToStorage('user_' + type, items);
+        } else if (info.source === 'server') {
+            let hidden = loadFromStorage('hidden_' + type);
+            if (!hidden.includes(info.localIndex)) hidden.push(info.localIndex);
+            saveToStorage('hidden_' + type, hidden);
+        }
+    }
+
+    function updateItem(type, combinedIndex, payload) {
+        const info = getItemSource(type, combinedIndex);
+        if (info.source === 'user') {
+            const items = loadFromStorage('user_' + type);
+            items[info.localIndex] = payload;
+            saveToStorage('user_' + type, items);
+        } else if (info.source === 'server') {
+            let overrides = loadFromStorage('override_' + type);
+            overrides[info.localIndex] = payload;
+            saveToStorage('override_' + type, overrides);
+        }
+    }
+
+    function getEffectiveItems(type) {
+        const server = serverData[type];
+        const hidden = loadFromStorage('hidden_' + type);
+        const overrides = loadFromStorage('override_' + type);
+        const user = loadFromStorage('user_' + type);
+        const result = [];
+        server.forEach((item, i) => {
+            if (hidden.includes(i)) return;
+            result.push(overrides[i] || item);
+        });
+        result.push(...user);
+        return result;
+    }
+
+    // ────────── Render ──────────
+    const grids = {
+        projects: document.getElementById('projects-grid'),
+        notes: document.getElementById('notes-grid'),
+        diary: document.getElementById('diary-grid'),
+        software: document.getElementById('software-grid'),
+        secret: document.getElementById('secret-grid')
+    };
+
+    function renderGrid(grid, items, type, label) {
+        if (!grid) return;
+        grid.innerHTML = '';
+        if (!items || items.length === 0) {
+            grid.innerHTML = '<div class="empty-card"><p>当前暂无内容，点击右上角"+"按钮添加新条目。</p></div>';
+            return;
+        }
+        items.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.classList.add('item-card');
+            if (item.bg) {
+                card.classList.add('has-bg');
+                if (item.bg.includes('url(') || item.bg.includes('http')) card.style.backgroundImage = `url(${item.bg})`;
+                else card.style.background = item.bg;
+            }
+            const stars = item.rating ? parseInt(item.rating) || 5 : 5;
+            const ratingHtml = `<div class="rating-stars">${'★'.repeat(stars)}${'☆'.repeat(5 - stars)}</div>`;
+            let extra = '';
+            if (type === 'software' && item.downloadUrl) extra += `<a href="${item.downloadUrl}" class="download-btn" title="下载" download><i class="fa-solid fa-download"></i> 下载</a>`;
+            if (type === 'note' && item.noteUrl) extra += `<a href="${item.noteUrl}" class="view-btn" title="查看笔记" target="_blank"><i class="fa-solid fa-book-open"></i> 查看</a>`;
+            card.innerHTML = `<h3>${item.title}</h3>${ratingHtml}<p>${item.desc || ''}</p>${extra}<button class="edit-btn" data-index="${index}" title="编辑"><i class="fa-solid fa-pen"></i></button><button class="delete-btn" data-index="${index}" title="删除"><i class="fa-solid fa-trash"></i></button>`;
+
+            card.querySelector('.delete-btn').addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const ok = await showDialog({ title: '<i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> 删除操作', message: `您确定要永久删除 ${label} <br><b>"${item.title}"</b> 吗？此举不可逆！`, type: 'confirm' });
+                if (ok) { removeItem(type, index); renderAll(); }
+            });
+            card.querySelector('.edit-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                openModal(type, true, index, item);
+            });
+            grid.appendChild(card);
+        });
+    }
+
+    function renderAll() {
+        renderGrid(grids.projects, getEffectiveItems('projects'), 'projects', '项目');
+        renderGrid(grids.notes, getEffectiveItems('notes'), 'notes', '笔记');
+        renderGrid(grids.diary, loadFromStorage('user_diary'), 'diary', '日记');
+        renderGrid(grids.software, getEffectiveItems('software'), 'software', '点评');
+        renderGrid(grids.secret, loadFromStorage('user_secret'), 'secret', '密信');
+    }
+
+    // ────────── Modal ──────────
     const addBtns = document.querySelectorAll('.add-btn');
     const modal = document.getElementById('add-modal');
     const btnCancel = document.getElementById('modal-cancel');
     const btnConfirm = document.getElementById('modal-confirm');
     const inputTitle = document.getElementById('modal-input-title');
     const inputDesc = document.getElementById('modal-input-desc');
+    const inputBg = document.getElementById('modal-input-bg');
+    const inputDownload = document.getElementById('modal-input-download');
+    const inputNote = document.getElementById('modal-input-note');
     const inputRating = document.getElementById('modal-input-rating');
     const modalTitle = document.getElementById('modal-title');
-    const projectsGrid = document.getElementById('projects-grid');
-    const notesGrid = document.getElementById('notes-grid');
-    const diaryGrid = document.getElementById('diary-grid');
-    const softwareGrid = document.getElementById('software-grid');
-    const secretGrid = document.getElementById('secret-grid');
     const previewArea = document.getElementById('modal-preview-area');
 
-    let currentAddType = '';
-    let isEditing = false;
-    let editIndex = -1;
+    let currentType = '', editingIndex = -1, editPayload = null;
 
-    const hardcodedProjects = [
-        {
-            title: '🌐 Jasmine 个人网站',
-            desc: '现代化个人网站，采用玻璃毛玻璃设计，支持深色/浅色主题切换、内容管理系统、粒子背景动画等功能。',
-            bg: 'linear-gradient(135deg, rgba(99,102,241,0.8) 0%, rgba(139,92,246,0.8) 100%)',
-            rating: 5
-        },
-        {
-            title: '📘 JXUT-BST 官网',
-            desc: '蓝色技术工作室官网，使用 VitePress 构建。采用 Vue + TypeScript 技术栈，提供完整的文档和项目展示平台。',
-            bg: 'linear-gradient(135deg, rgba(30,144,255,0.8) 0%, rgba(0,191,255,0.8) 100%)',
-            rating: 5
-        },
-        {
-            title: '📝 心流笔记 App',
-            desc: '兼具记笔记和复盘功能的应用。帮助用户记录学习过程中的心流状态，支持知识复盘和回顾功能。',
-            bg: 'linear-gradient(135deg, rgba(34,197,94,0.8) 0%, rgba(16,185,129,0.8) 100%)',
-            rating: 4
-        },
-        {
-            title: '🤖 Raicom Intelli Scout',
-            desc: '智能侦查系统项目，结合机器人技术和AI算法，用于数据分析和智能决策支持。',
-            bg: 'linear-gradient(135deg, rgba(244,114,182,0.8) 0%, rgba(168,85,247,0.8) 100%)',
-            rating: 5
-        },
-        {
-            title: '👨‍💻 Ryker-Zhong 个人档案',
-            desc: '个人档案库，展示技术栈和开源贡献。专注于机器人技术、嵌入式系统和前端可视化开发。',
-            bg: 'linear-gradient(135deg, rgba(251,146,60,0.8) 0%, rgba(249,115,22,0.8) 100%)',
-            rating: 5
-        }
-    ];
-
-    const hardcodedNotes = [
-        {
-            title: '🕉️ 佛教史',
-            desc: '系统学习佛教的起源、发展、传播等内容。包含佛教的黄金时代、中心转移、消长变化等重要历史阶段。',
-            bg: 'linear-gradient(135deg, rgba(245,158,11,0.8) 0%, rgba(217,119,6,0.8) 100%)',
-            noteUrl: 'notes/佛教史/目录.md',
-            rating: 5
-        },
-        {
-            title: '☯️ 道教史',
-            desc: '深入了解道教的起源、发展演变及其在中国传统文化中的地位。涵盖汉魏到当代各个历史时期。',
-            bg: 'linear-gradient(135deg, rgba(239,68,68,0.8) 0%, rgba(220,38,38,0.8) 100%)',
-            noteUrl: 'notes/道教史/附录.md',
-            rating: 5
-        }
-    ];
-
-    const hardcodedDiary = [];
-
-    const hardcodedSoftware = [
-        {
-            title: '📄 下载说明',
-            desc: '网站中的下载入口说明，使用本地下载说明文档查看当前可用资源。',
-            downloadUrl: 'downloads/readme.md',
-            rating: 5
-        },
-        {
-            title: '🧠 Obsidian - 知识管理工具',
-            desc: '强大的笔记和知识管理应用，支持双向链接、图谱视图、插件系统。完美用于个人知识库、研究笔记、文献管理等场景。',
-            downloadUrl: 'https://obsidian.md/download',
-            rating: 5
-        },
-        {
-            title: '⚡ PowerToys - 系统增强工具',
-            desc: 'Microsoft官方出品的Windows系统增强工具集。包含快速查看、文件批量重命名、窗口管理等功能。',
-            downloadUrl: 'https://github.com/microsoft/PowerToys/releases',
-            rating: 5
-        }
-    ];
-
-    const hardcodedSecret = [];
-
-    let defaultProjects = [...hardcodedProjects];
-    let defaultNotes = [...hardcodedNotes];
-    let defaultSoftware = [...hardcodedSoftware];
-    let defaultDiary = [...hardcodedDiary];
-    let defaultSecret = [...hardcodedSecret];
-
-    const DATA_VERSION = '2.0';
-    const storedVersion = localStorage.getItem('dataVersion');
-    if (storedVersion !== DATA_VERSION) {
-        localStorage.removeItem('customProjects');
-        localStorage.removeItem('customNotes');
-        localStorage.removeItem('customSoftware');
-        localStorage.removeItem('customDiary');
-        localStorage.removeItem('customSecret');
-        localStorage.setItem('dataVersion', DATA_VERSION);
-    }
-
-    async function loadServerDefaults() {
-        try {
-            const r = await fetch('data/projects.json?v=' + Date.now());
-            if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length) defaultProjects = d; }
-        } catch (e) {}
-        try {
-            const r = await fetch('data/notes.json?v=' + Date.now());
-            if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length) defaultNotes = d; }
-        } catch (e) {}
-        try {
-            const r = await fetch('data/software.json?v=' + Date.now());
-            if (r.ok) { const d = await r.json(); if (Array.isArray(d) && d.length) defaultSoftware = d; }
-        } catch (e) {}
-    }
-
-    function getStoredData(key, defaultData) {
-        const data = localStorage.getItem(key);
-        if (!data) {
-            localStorage.setItem(key, JSON.stringify(defaultData));
-            return defaultData;
-        }
-        try {
-            const parsed = JSON.parse(data);
-            if (!Array.isArray(parsed)) {
-                localStorage.setItem(key, JSON.stringify(defaultData));
-                return defaultData;
-            }
-            if (parsed.length === 0 && defaultData.length > 0) {
-                localStorage.setItem(key, JSON.stringify(defaultData));
-                return defaultData;
-            }
-            return parsed;
-        } catch (err) {
-            localStorage.setItem(key, JSON.stringify(defaultData));
-            return defaultData;
-        }
-    }
-
-    function renderCards(gridElement, dataKey, itemsArray, typeLabel, typeString) {
-        if (!gridElement) return;
-        gridElement.innerHTML = '';
-        if (!Array.isArray(itemsArray) || itemsArray.length === 0) {
-            gridElement.innerHTML = `
-                <div class="empty-card">
-                    <p>当前暂无内容，点击右上角“+”按钮添加新条目。</p>
-                </div>
-            `;
-            return;
-        }
-        itemsArray.forEach((item, index) => {
-            const card = document.createElement('div');
-            card.classList.add('item-card');
-            
-            if (item.bg) {
-                card.classList.add('has-bg');
-                // 支持 URL 和 gradient
-                if (item.bg.includes('url(') || item.bg.includes('http')) {
-                    card.style.backgroundImage = `url(${item.bg})`;
-                } else {
-                    card.style.background = item.bg;
-                }
-            }
-            
-            let ratingHtml = '';
-            if (item.rating) {
-                const num = parseInt(item.rating) || 5;
-                ratingHtml = `<div class="rating-stars">${'★'.repeat(num)}${'☆'.repeat(5-num)}</div>`;
-            }
-            
-            let downloadBtnHtml = '';
-            if (typeString === 'software' && item.downloadUrl) {
-                downloadBtnHtml = `<a href="${item.downloadUrl}" class="download-btn" title="下载" download><i class="fa-solid fa-download"></i> 下载</a>`;
-            }
-            
-            let viewBtnHtml = '';
-            if (typeString === 'note' && item.noteUrl) {
-                viewBtnHtml = `<a href="${item.noteUrl}" class="view-btn" title="查看笔记" target="_blank"><i class="fa-solid fa-book-open"></i> 查看</a>`;
-            }
-            
-            card.innerHTML = `
-                <h3>${item.title}</h3>
-                ${ratingHtml}
-                <p>${item.desc}</p>
-                ${downloadBtnHtml}
-                ${viewBtnHtml}
-                <button class="edit-btn" data-index="${index}" title="编辑"><i class="fa-solid fa-pen"></i></button>
-                <button class="delete-btn" data-index="${index}" title="删除"><i class="fa-solid fa-trash"></i></button>
-            `;
-            
-            card.querySelector('.delete-btn').addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const isConfirmed = await showDialog({
-                    title: '<i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> 删除操作',
-                    message: `您确定要永久删除 ${typeLabel} <br><b>"${item.title}"</b> 吗？此举不可逆！`,
-                    type: 'confirm'
-                });
-                
-                if (isConfirmed) {
-                    itemsArray.splice(index, 1);
-                    localStorage.setItem(dataKey, JSON.stringify(itemsArray));
-                    renderAll();
-                }
-            });
-            
-            card.querySelector('.edit-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                openModal(typeString, true, index, item);
-            });
-            
-            gridElement.appendChild(card);
-        });
-    }
-
-    function renderAll() {
-        renderCards(projectsGrid, 'customProjects', getStoredData('customProjects', defaultProjects), '项目', 'project');
-        renderCards(diaryGrid, 'customDiary', getStoredData('customDiary', defaultDiary), '日记', 'diary');
-        renderCards(softwareGrid, 'customSoftware', getStoredData('customSoftware', defaultSoftware), '点评', 'software');
-        renderCards(notesGrid, 'customNotes', getStoredData('customNotes', defaultNotes), '笔记', 'note');
-        renderCards(secretGrid, 'customSecret', getStoredData('customSecret', defaultSecret), '密信', 'secret');
-    }
-
-    // Initialize loaded items (async: load server data first)
-    (async () => {
-        await loadServerDefaults();
-        renderAll();
-    })();
-
-    // --- Admin Mode Easter Egg ---
-    const avatar = document.querySelector('.avatar');
-    let clickCount = 0;
-    let clickTimer;
-
-    if (avatar) {
-        avatar.addEventListener('click', async () => {
-            clickCount++;
-            clearTimeout(clickTimer);
-            clickTimer = setTimeout(() => { clickCount = 0; }, 1200);
-
-            if (clickCount === 5) {
-                clickCount = 0;
-                const pwd = await showDialog({
-                    title: '<i class="fa-solid fa-user-shield"></i> 站长系统',
-                    message: '检测到特权触碰，请输入最高权限密匙。<br><span style="font-size:0.85rem; color: rgba(255,255,255,0.5);">(提示：代表系统管理员的5个英文字母)</span>',
-                    type: 'prompt'
-                });
-                if (pwd === "admin") {
-                    document.body.classList.toggle('admin-mode');
-                    if (document.body.classList.contains('admin-mode')) {
-                        await showDialog({ title: '🎉 终极权限已激活', message: '「全部四大板块」的内部管控台现已解锁开放！', hideCancel: true });
-                    } else {
-                        await showDialog({ title: '🔒 潜行模式', message: '已彻底退出站长模式，重新归隐并锁定所有修改后台。', hideCancel: true });
-                    }
-                } else if (pwd !== null) {
-                    await showDialog({ title: '⚠️ 非法操作', message: '指纹或密匙无匹配信息，只有真正的主人才有权触碰。', hideCancel: true });
-                }
-            }
-        });
-    }
-
-    // Open Modal Function
-    function openModal(type, editing = false, index = -1, itemData = null) {
-        currentAddType = type;
-        isEditing = editing;
-        editIndex = index;
-        
-        const inputBg = document.getElementById('modal-input-bg');
-        const inputDownload = document.getElementById('modal-input-download');
-        const inputNote = document.getElementById('modal-input-note');
-
+    function openModal(type, editing = false, index = -1, item = null) {
+        currentType = type; editingIndex = editing ? index : -1; editPayload = editing && editingIndex !== -1 ? { ...item } : null;
         inputDesc.style.display = 'block';
-        if (inputRating) inputRating.style.display = 'block';
-        if (inputDownload) inputDownload.style.display = 'none';
-        if (inputNote) inputNote.style.display = 'none';
+        inputRating.style.display = 'block';
+        inputDownload.style.display = type === 'software' ? 'block' : 'none';
+        inputNote.style.display = type === 'note' ? 'block' : 'none';
 
-        if (type === 'project') {
-            modalTitle.textContent = editing ? '编辑项目作品' : '发布新项目作品';
-        } else if (type === 'diary') {
-            modalTitle.textContent = editing ? '编辑生活日记' : '写下新日记';
-        } else if (type === 'software') {
-            modalTitle.textContent = editing ? '编辑工具点评' : '发布新点评';
-            if (inputDownload) inputDownload.style.display = 'block';
-        } else if (type === 'note') {
-            modalTitle.textContent = editing ? '编辑学习笔记' : '发布新笔记';
-            if (inputNote) inputNote.style.display = 'block';
-        } else if (type === 'secret') {
-            modalTitle.textContent = editing ? '翻阅私密档案' : '封装加密档案';
-        }
-        
-        if (editing && itemData) {
-            inputTitle.value = itemData.title || '';
-            inputDesc.value = itemData.desc || '';
-            if (inputBg) inputBg.value = itemData.bg || '';
-            if (inputDownload) inputDownload.value = itemData.downloadUrl || '';
-            if (inputNote) inputNote.value = itemData.noteUrl || '';
-            if (inputRating && itemData.rating) inputRating.value = itemData.rating; else if (inputRating) inputRating.value = '5';
+        const titles = { project: '项目作品', diary: '生活日记', software: '工具点评', note: '学习笔记', secret: '加密档案' };
+        modalTitle.textContent = editing ? '编辑' + titles[type] : '发布新' + (titles[type] || '');
+
+        if (editing && item) {
+            inputTitle.value = item.title || '';
+            inputDesc.value = item.desc || '';
+            if (inputBg) inputBg.value = item.bg || '';
+            if (inputDownload) inputDownload.value = item.downloadUrl || '';
+            if (inputNote) inputNote.value = item.noteUrl || '';
+            if (inputRating) inputRating.value = item.rating || '5';
         } else {
-            inputTitle.value = '';
-            inputDesc.value = '';
-            if (inputBg) inputBg.value = '';
-            if (inputDownload) inputDownload.value = '';
-            if (inputNote) inputNote.value = '';
+            [inputTitle, inputDesc, inputBg, inputDownload, inputNote].forEach(el => { if (el) el.value = ''; });
             if (inputRating) inputRating.value = '5';
         }
-        
         modal.classList.add('show');
-        updatePreview(); // Trigger first preview render
+        updatePreview();
     }
 
-    // --- Live Preview Logic ---
+    function closeModal() { modal.classList.remove('show'); }
+
     function updatePreview() {
         if (!previewArea) return;
         const title = inputTitle.value.trim() || '在此实时预览标题...';
         const desc = inputDesc.value.trim() || '在这里显示具体的描述和点评内容...';
-        const inputBg = document.getElementById('modal-input-bg');
         const bg = inputBg ? inputBg.value.trim() : '';
         const rating = (inputRating && inputRating.style.display !== 'none') ? parseInt(inputRating.value) || 5 : 5;
-
         previewArea.innerHTML = '';
-
         const card = document.createElement('div');
         card.classList.add('item-card');
         if (bg) {
             card.classList.add('has-bg');
-            // 支持 URL 和 gradient
-            if (bg.includes('url(') || bg.includes('http')) {
-                card.style.backgroundImage = `url(${bg})`;
-            } else {
-                card.style.background = bg;
-            }
+            if (bg.includes('url(') || bg.includes('http')) card.style.backgroundImage = `url(${bg})`;
+            else card.style.background = bg;
         }
-        
-        const ratingHtml = `<div class="rating-stars">${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>`;
-        
-        card.innerHTML = `
-            <h3>${title}</h3>
-            ${ratingHtml}
-            <p>${desc}</p>
-        `;
+        card.innerHTML = `<h3>${title}</h3><div class="rating-stars">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div><p>${desc}</p>`;
         previewArea.appendChild(card);
     }
 
-    // Attach listeners for live preview updates
-    [inputTitle, inputDesc, document.getElementById('modal-input-bg'), inputRating].forEach(el => {
-        if (el) {
-            el.addEventListener('input', updatePreview);
-            el.addEventListener('change', updatePreview);
-        }
-    });
-
-    // Attach Add Button Listeners
-    addBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            openModal(btn.getAttribute('data-type'), false);
-        });
-    });
-
-    // Close Modal
-    function closeModal() {
-        modal.classList.remove('show');
-    }
-
+    [inputTitle, inputDesc, inputBg, inputRating].forEach(el => { if (el) { el.addEventListener('input', updatePreview); el.addEventListener('change', updatePreview); } });
+    addBtns.forEach(btn => btn.addEventListener('click', () => openModal(btn.getAttribute('data-type'))));
     btnCancel.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-    // Confirm Add / Update
     btnConfirm.addEventListener('click', () => {
         const title = inputTitle.value.trim();
-        const desc = inputDesc.value.trim();
-        const inputBg = document.getElementById('modal-input-bg');
-        const inputDownload = document.getElementById('modal-input-download');
-        const inputNote = document.getElementById('modal-input-note');
-        const bg = inputBg ? inputBg.value.trim() : '';
-        const downloadUrl = inputDownload ? inputDownload.value.trim() : '';
-        const noteUrl = inputNote ? inputNote.value.trim() : '';
-        const rating = (inputRating && inputRating.style.display !== 'none') ? inputRating.value : '5';
+        if (!title) { showDialog({ title: '⚠️ 无法发布', message: '卡片的名称或核心标题必须填写！', hideCancel: true }); return; }
+        const payload = {
+            title,
+            desc: inputDesc.value.trim(),
+            bg: inputBg ? inputBg.value.trim() : '',
+            rating: (inputRating && inputRating.style.display !== 'none') ? inputRating.value : '5'
+        };
+        if (currentType === 'software' && inputDownload) payload.downloadUrl = inputDownload.value.trim();
+        if (currentType === 'note' && inputNote) payload.noteUrl = inputNote.value.trim();
 
-        if (!title) {
-            showDialog({ title: '⚠️ 无法发布', message: '卡片的名称或核心标题必须填写！', hideCancel: true });
-            return;
-        }
-
-        let storeKey = '';
-        let defaultData = [];
-        const itemPayload = { title, desc, bg, rating };
-        
-        // 软件类型添加下载链接
-        if (currentAddType === 'software' && downloadUrl) {
-            itemPayload.downloadUrl = downloadUrl;
-        }
-        
-        // 笔记类型添加笔记链接
-        if (currentAddType === 'note' && noteUrl) {
-            itemPayload.noteUrl = noteUrl;
-        }
-
-        if (currentAddType === 'project') {
-            storeKey = 'customProjects';
-            defaultData = defaultProjects;
-        } else if (currentAddType === 'diary') {
-            storeKey = 'customDiary';
-            defaultData = defaultDiary;
-        } else if (currentAddType === 'software') {
-            storeKey = 'customSoftware';
-            defaultData = defaultSoftware;
-        } else if (currentAddType === 'note') {
-            storeKey = 'customNotes';
-            defaultData = defaultNotes;
-        } else if (currentAddType === 'secret') {
-            storeKey = 'customSecret';
-            defaultData = defaultSecret;
-        }
-
-        const items = getStoredData(storeKey, defaultData);
-        if (isEditing && editIndex > -1) {
-            items[editIndex] = itemPayload;
+        if (editingIndex !== -1) {
+            updateItem(currentType, editingIndex, payload);
         } else {
-            items.push(itemPayload);
+            const userKey = 'user_' + currentType;
+            const items = loadFromStorage(userKey);
+            items.push(payload);
+            saveToStorage(userKey, items);
         }
-        localStorage.setItem(storeKey, JSON.stringify(items));
-        
         renderAll();
         closeModal();
     });
 
-    // --- Email Modal Logic ---
+    // ────────── Admin Mode ──────────
+    const avatar = document.querySelector('.avatar');
+    let clickCount = 0, clickTimer;
+    if (avatar) {
+        avatar.addEventListener('click', async () => {
+            clickCount++; clearTimeout(clickTimer);
+            clickTimer = setTimeout(() => { clickCount = 0; }, 1200);
+            if (clickCount === 5) {
+                clickCount = 0;
+                const pwd = await showDialog({ title: '<i class="fa-solid fa-user-shield"></i> 站长系统', message: '检测到特权触碰，请输入最高权限密匙。<br><span style="font-size:0.85rem; color: rgba(255,255,255,0.5);">(提示：代表系统管理员的5个英文字母)</span>', type: 'prompt' });
+                if (pwd === "admin") {
+                    document.body.classList.toggle('admin-mode');
+                    await showDialog({ title: document.body.classList.contains('admin-mode') ? '🎉 终极权限已激活' : '🔒 潜行模式', message: document.body.classList.contains('admin-mode') ? '「全部四大板块」的内部管控台现已解锁开放！' : '已彻底退出站长模式，重新归隐并锁定所有修改后台。', hideCancel: true });
+                } else if (pwd !== null) await showDialog({ title: '⚠️ 非法操作', message: '指纹或密匙无匹配信息，只有真正的主人才有权触碰。', hideCancel: true });
+            }
+        });
+    }
+
+    // ────────── Email Modal ──────────
     const emailIconLink = document.getElementById('email-icon-link');
     const emailModal = document.getElementById('email-modal');
     const closeEmailBtn = document.getElementById('close-email-btn');
     const copyEmailBtn = document.getElementById('copy-email-btn');
     const emailText = document.getElementById('email-text');
-
     if (emailIconLink && emailModal) {
-        emailIconLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            emailModal.classList.add('show');
-        });
-
-        closeEmailBtn.addEventListener('click', () => {
-            emailModal.classList.remove('show');
-        });
-
-        emailModal.addEventListener('click', (e) => {
-            if (e.target === emailModal) {
-                emailModal.classList.remove('show');
-            }
-        });
-
+        emailIconLink.addEventListener('click', (e) => { e.preventDefault(); emailModal.classList.add('show'); });
+        closeEmailBtn.addEventListener('click', () => emailModal.classList.remove('show'));
+        emailModal.addEventListener('click', (e) => { if (e.target === emailModal) emailModal.classList.remove('show'); });
         copyEmailBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(emailText.innerText).then(() => {
-                const originalHtml = copyEmailBtn.innerHTML;
+                const orig = copyEmailBtn.innerHTML;
                 copyEmailBtn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制';
-                copyEmailBtn.style.background = 'rgba(16, 185, 129, 0.2)';
-                copyEmailBtn.style.borderColor = 'rgba(16, 185, 129, 0.5)';
-                copyEmailBtn.style.color = '#10b981';
-                setTimeout(() => {
-                    copyEmailBtn.innerHTML = originalHtml;
-                    copyEmailBtn.style.background = 'rgba(255, 255, 255, 0.1)';
-                    copyEmailBtn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                    copyEmailBtn.style.color = 'white';
-                }, 2000);
-            }).catch(err => {
-                alert('复制失败，请手动选择复制。');
-            });
+                copyEmailBtn.style.cssText = 'background:rgba(16,185,129,0.2);border-color:rgba(16,185,129,0.5);color:#10b981';
+                setTimeout(() => { copyEmailBtn.innerHTML = orig; copyEmailBtn.style.cssText = ''; }, 2000);
+            }).catch(() => alert('复制失败，请手动选择复制。'));
         });
     }
 
-    // --- Debug Panel (Ctrl+Shift+D) ---
+    // ────────── Debug Panel ──────────
     function createDebugPanel() {
         const panel = document.createElement('div');
         panel.id = 'debug-panel';
         panel.innerHTML = `
-            <div class="debug-header">
-                <span>🔧 Debug Panel</span>
-                <button id="debug-close">×</button>
-            </div>
-            <div class="debug-body">
-                <div class="debug-section">
-                    <div class="debug-label">数据版本</div>
-                    <div class="debug-value" id="debug-version">${DATA_VERSION}</div>
-                </div>
-                <div class="debug-section">
-                    <div class="debug-label">localStorage</div>
-                    <div class="debug-value" id="debug-storage"></div>
-                </div>
-                <div class="debug-section">
-                    <div class="debug-label">服务器数据状态</div>
-                    <div class="debug-value" id="debug-server">未检测</div>
-                </div>
-                <div class="debug-actions">
-                    <button id="debug-refresh" class="debug-btn">🔄 从服务器刷新</button>
-                    <button id="debug-clear" class="debug-btn debug-btn-danger">🗑️ 清除缓存并刷新</button>
-                </div>
-                <div class="debug-toast" id="debug-toast"></div>
-            </div>
-        `;
+<div class="debug-header"><span>🔧 Debug Panel</span><button id="debug-close">×</button></div>
+<div class="debug-body">
+<div class="debug-section"><div class="debug-label">版本</div><div class="debug-value">${VERSION}</div></div>
+<div class="debug-section"><div class="debug-label">服务器数据</div><div class="debug-value" id="dbg-server">加载中...</div></div>
+<div class="debug-section"><div class="debug-label">存储</div><div class="debug-value" id="dbg-storage">加载中...</div></div>
+<div class="debug-actions">
+<button id="dbg-refresh" class="debug-btn">🔄 刷新服务器数据</button>
+<button id="dbg-reset" class="debug-btn debug-btn-danger">🗑️ 重置全部数据</button>
+</div>
+<div id="dbg-toast" class="debug-toast"></div>
+</div>`;
         document.body.appendChild(panel);
-
         document.getElementById('debug-close').onclick = () => panel.classList.remove('show');
-        document.getElementById('debug-refresh').onclick = async () => {
-            showDebugToast('正在从服务器加载数据...');
-            await loadServerDefaults();
-            localStorage.removeItem('customProjects');
-            localStorage.removeItem('customNotes');
-            localStorage.removeItem('customSoftware');
-            localStorage.removeItem('customDiary');
-            localStorage.removeItem('customSecret');
-            renderAll();
-            updateDebugInfo();
-            showDebugToast('✅ 数据已刷新');
-        };
-        document.getElementById('debug-clear').onclick = () => {
-            localStorage.clear();
-            showDebugToast('🧹 缓存已清除，正在刷新...');
-            setTimeout(() => location.reload(), 500);
-        };
+        document.getElementById('dbg-refresh').onclick = async () => { showToast('正在刷新...'); await loadServerData(); renderAll(); updateDebug(); showToast('✅ 已刷新'); };
+        document.getElementById('dbg-reset').onclick = () => { localStorage.clear(); showToast('已重置，即将刷新...'); setTimeout(() => location.reload(), 500); };
     }
 
-    function updateDebugInfo() {
-        const storageEl = document.getElementById('debug-storage');
-        const serverEl = document.getElementById('debug-server');
-        if (!storageEl) return;
-        const keys = ['customProjects', 'customNotes', 'customSoftware', 'customDiary', 'customSecret'];
-        let html = '';
-        keys.forEach(key => {
-            const raw = localStorage.getItem(key);
-            try {
-                const arr = JSON.parse(raw);
-                html += `<div>${key}: <span class="debug-badge">${Array.isArray(arr) ? arr.length : '?'} 条</span></div>`;
-            } catch {
-                html += `<div>${key}: <span class="debug-badge debug-badge-warn">无效数据</span></div>`;
-            }
-        });
-        storageEl.innerHTML = html;
-        serverEl.innerHTML = `
-            <div>defaultProjects: <span class="debug-badge">${defaultProjects.length} 条</span></div>
-            <div>defaultNotes: <span class="debug-badge">${defaultNotes.length} 条</span></div>
-            <div>defaultSoftware: <span class="debug-badge">${defaultSoftware.length} 条</span></div>
-        `;
+    function updateDebug() {
+        const se = document.getElementById('dbg-server');
+        const ste = document.getElementById('dbg-storage');
+        if (se) se.innerHTML = `projects: ${serverData.projects.length} 条<br>notes: ${serverData.notes.length} 条<br>software: ${serverData.software.length} 条`;
+        if (ste) {
+            const keys = ['user_projects', 'user_notes', 'user_diary', 'user_software', 'user_secret', 'hidden_projects', 'hidden_notes', 'hidden_software', 'override_projects', 'override_notes', 'override_software'];
+            ste.innerHTML = keys.map(k => {
+                const d = loadFromStorage(k);
+                return `${k}: ${Array.isArray(d) ? d.length : 0} 条`;
+            }).join('<br>');
+        }
     }
 
-    let debugToastTimer;
+    let toastTimer;
 
-    function showDebugToast(msg) {
-        const el = document.getElementById('debug-toast');
+    function showToast(msg) {
+        const el = document.getElementById('dbg-toast');
         if (!el) return;
         el.textContent = msg;
         el.classList.add('show');
-        clearTimeout(debugToastTimer);
-        debugToastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
     }
 
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.shiftKey && e.key === 'D') {
             e.preventDefault();
-            const panel = document.getElementById('debug-panel');
-            if (panel) {
-                panel.classList.toggle('show');
-                if (panel.classList.contains('show')) updateDebugInfo();
-            }
+            const p = document.getElementById('debug-panel');
+            if (p) { p.classList.toggle('show'); if (p.classList.contains('show')) updateDebug(); }
         }
     });
 
-    createDebugPanel();
+    // ────────── Init ──────────
+    (async () => {
+        const v = localStorage.getItem('_ver');
+        if (v !== VERSION) {
+            localStorage.clear();
+            localStorage.setItem('_ver', VERSION);
+        }
+        await loadServerData();
+        renderAll();
+        createDebugPanel();
+    })();
 });
