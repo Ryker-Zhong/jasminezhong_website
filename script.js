@@ -135,10 +135,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ────────── Notes ──────────
   let notesData = [];
-  let notesLikes = JSON.parse(localStorage.getItem('notesLikes') || '{}');
   let notesFilter = 'all';
+  let likeCounts = {};
+  let myLikes = new Set(JSON.parse(localStorage.getItem('myNoteLikes') || '[]'));
 
-  function getNoteLikes(id) { return notesLikes[id] || 0; }
+  function getNoteLikes(id) { return likeCounts[id] || 0; }
+
+  function saveMyLikes() {
+    localStorage.setItem('myNoteLikes', JSON.stringify([...myLikes]));
+  }
+
+  async function fetchLikeCounts() {
+    try {
+      const res = await fetch('api/likes.php?type=notes');
+      const data = await res.json();
+      if (data.ok) {
+        likeCounts = data.counts || {};
+        renderNotesGrid();
+        updateReadingLikeUI();
+      }
+    } catch (e) {
+      console.error('Failed to load like counts', e);
+    }
+  }
+
+  async function toggleNoteLike(id) {
+    id = String(id);
+    const action = myLikes.has(id) ? 'unlike' : 'like';
+    try {
+      const res = await fetch('api/likes.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'notes', id: id, action: action })
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'request failed');
+      likeCounts[id] = data.count;
+    } catch (e) {
+      console.error('Like request failed', e);
+      likeCounts[id] = Math.max(0, (likeCounts[id] || 0) + (action === 'like' ? 1 : -1));
+    }
+    if (action === 'like') myLikes.add(id); else myLikes.delete(id);
+    saveMyLikes();
+    renderNotesGrid();
+    updateReadingLikeUI();
+  }
 
   function renderNotesGrid() {
     const grid = document.getElementById('notesGrid');
@@ -156,8 +197,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="card-title">${n.title}</div>
         <div class="card-desc">${n.desc}</div>
         <div class="card-footer">
-          <button class="btn-like ${notesLikes[n.id] > 0 ? 'liked' : ''}" data-id="${n.id}">
-            <i class="fa-${notesLikes[n.id] > 0 ? 'solid' : 'regular'} fa-heart"></i> <span>${getNoteLikes(n.id)}</span>
+          <button class="btn-like ${myLikes.has(String(n.id)) ? 'liked' : ''}" data-id="${n.id}">
+            <i class="fa-${myLikes.has(String(n.id)) ? 'solid' : 'regular'} fa-heart"></i> <span>${getNoteLikes(n.id)}</span>
           </button>
           <button class="btn-read" data-id="${n.id}"><i class="fa-regular fa-eye"></i> 阅读</button>
         </div>
@@ -168,10 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     grid.querySelectorAll('.btn-like').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = btn.dataset.id;
-        notesLikes[id] = (notesLikes[id] || 0) + 1;
-        localStorage.setItem('notesLikes', JSON.stringify(notesLikes));
-        renderNotesGrid();
+        toggleNoteLike(btn.dataset.id);
       });
     });
 
@@ -179,15 +217,14 @@ document.addEventListener('DOMContentLoaded', () => {
     grid.querySelectorAll('.btn-read').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = parseInt(btn.dataset.id);
-        const note = notesData.find(n => n.id === id);
+        const note = notesData.find(n => String(n.id) === btn.dataset.id);
         if (note) openReadingModal(note);
       });
     });
   }
 
   async function renderNotes() {
-    notesData = await loadJSON('data/notes.json');
+    notesData = (await loadJSON('data/notes.json')).map((n, i) => ({ ...n, id: n.id ?? i + 1 }));
     if (!document.getElementById('notesGrid')) return;
 
     // Build filter tags from data
@@ -207,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('notesSearch')?.addEventListener('input', renderNotesGrid);
     renderNotesGrid();
+    fetchLikeCounts();
   }
   renderNotes();
 
@@ -219,14 +257,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const readingClose = document.getElementById('readingClose');
   let currentNoteId = null;
 
+  function updateReadingLikeUI() {
+    if (currentNoteId === null || !readingLike) return;
+    const id = String(currentNoteId);
+    const liked = myLikes.has(id);
+    readingLikeCount.textContent = getNoteLikes(id);
+    readingLike.classList.toggle('liked', liked);
+    readingLike.querySelector('i').className = liked ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+  }
+
   function openReadingModal(note) {
     currentNoteId = note.id;
     readingTitle.textContent = note.title;
     readingContent.innerHTML = (note.content || note.desc || '').split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
-    const likes = getNoteLikes(note.id);
-    readingLikeCount.textContent = likes;
-    readingLike.classList.toggle('liked', likes > 0);
-    readingLike.querySelector('i').className = likes > 0 ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+    updateReadingLikeUI();
     readingModal.classList.add('show');
   }
 
@@ -235,13 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     readingModal.addEventListener('click', (e) => { if (e.target === readingModal) readingModal.classList.remove('show'); });
     readingLike?.addEventListener('click', () => {
       if (currentNoteId === null) return;
-      notesLikes[currentNoteId] = (notesLikes[currentNoteId] || 0) + 1;
-      localStorage.setItem('notesLikes', JSON.stringify(notesLikes));
-      const likes = notesLikes[currentNoteId];
-      readingLikeCount.textContent = likes;
-      readingLike.classList.toggle('liked', likes > 0);
-      readingLike.querySelector('i').className = likes > 0 ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
-      renderNotesGrid();
+      toggleNoteLike(currentNoteId);
     });
   }
 
@@ -359,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function refreshDebugBody() {
     const body = document.getElementById('debugBody');
     if (!body) return;
-    const likes = JSON.parse(localStorage.getItem('notesLikes') || '{}');
+    const likes = likeCounts;
     let projectsCount = '?', notesCount = '?', diaryCount = '?', softwareCount = '?';
     try {
       const [p, n, d, s] = await Promise.all([
@@ -376,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <span>notes.json</span><span style="text-align:right;color:#60a5fa">${notesCount} items</span>
         <span>diary.json</span><span style="text-align:right;color:#60a5fa">${diaryCount} items</span>
         <span>software.json</span><span style="text-align:right;color:#60a5fa">${softwareCount} items</span>
-        <span>likes (localStorage)</span><span style="text-align:right;color:#f472b6">${Object.keys(likes).length} items</span>
+        <span>likes (server)</span><span style="text-align:right;color:#f472b6">${Object.keys(likes).length} items</span>
         <span>console errors</span><span style="text-align:right;color:#f87171">${debugLogs.length}</span>
       </div>
       <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:6px;display:flex;gap:6px">
@@ -385,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
     document.getElementById('debugClearLikes')?.addEventListener('click', () => {
-      if (confirm('Clear all likes data?')) { localStorage.removeItem('notesLikes'); notesLikes = {}; refreshDebugBody(); renderNotesGrid(); }
+      if (confirm('Clear my local like records?')) { localStorage.removeItem('myNoteLikes'); myLikes = new Set(); refreshDebugBody(); renderNotesGrid(); updateReadingLikeUI(); }
     });
   }
 });
