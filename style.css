@@ -348,23 +348,22 @@ body.bg-starry {
     border-color: rgba(255,255,255,0.35);
 }
 .qr-popup {
-    position: absolute;
-    bottom: 54px; left: 50%;
-    transform: translateX(-50%) translateY(10px);
+    position: fixed;
     width: 130px;
     border-radius: 12px;
     opacity: 0;
     visibility: hidden;
+    transform: translate(-50%, calc(-100% + 10px));
     transition: all 0.3s ease;
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     border: 2px solid rgba(255,255,255,0.2);
     pointer-events: none;
-    z-index: 10;
+    z-index: 2000;
 }
 .qr-popup.show {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
+    transform: translate(-50%, calc(-100% - 10px));
 }
 
 /* ─── Section Titles ─── */
