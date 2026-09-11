@@ -38,6 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
     else { icon.className = 'fa-solid fa-music'; text.textContent = '播放音乐'; musicToggle.style.color = ''; }
   });
 
+  // ────────── QQ QR Popup ──────────
+  const qqIconLink = document.querySelector('.qr-trigger');
+  const qrPopup = qqIconLink?.querySelector('.qr-popup');
+  if (qqIconLink && qrPopup) {
+    qqIconLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      qrPopup.classList.toggle('show');
+    });
+    document.addEventListener('click', (e) => {
+      if (!qqIconLink.contains(e.target)) qrPopup.classList.remove('show');
+    });
+  }
+
   // ────────── Particles ──────────
   const pContainer = document.getElementById('particles-container');
   if (pContainer) {
