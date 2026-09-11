@@ -620,12 +620,16 @@ body.bg-starry {
     margin-top: 0.6rem;
 }
 .timeline-img {
-    width: 80px; height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
+    max-width: 240px;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
     cursor: pointer;
     transition: transform 0.25s ease;
     border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
 }
 .timeline-img:hover { transform: scale(1.05); }
 
