@@ -1,0 +1,5 @@
+data/*.db
+data/*.sqlite
+.vscode/
+.DS_Store
+Thumbs.db
