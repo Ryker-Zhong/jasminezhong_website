@@ -1,7 +1,81 @@
-<html>
-<head><title>404 Not Found</title></head>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 页面未找到 | Jasmine</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: rgba(255,255,255,0.85);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #312e81 100%);
+            overflow: hidden;
+        }
+        .stars, .stars::after {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.7) 50%, transparent 100%),
+                radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.5) 50%, transparent 100%),
+                radial-gradient(2px 2px at 60% 20%, rgba(255,255,255,0.6) 50%, transparent 100%),
+                radial-gradient(1px 1px at 80% 50%, rgba(255,255,255,0.5) 50%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 90% 80%, rgba(255,255,255,0.7) 50%, transparent 100%),
+                radial-gradient(1px 1px at 10% 85%, rgba(255,255,255,0.4) 50%, transparent 100%);
+        }
+        .stars::after {
+            content: '';
+            transform: translate(30%, 15%);
+        }
+        .box {
+            position: relative;
+            text-align: center;
+            padding: 3rem 2.5rem;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+            max-width: 90%;
+        }
+        .code {
+            font-size: 5.5rem;
+            font-weight: 700;
+            line-height: 1;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+        h1 { font-size: 1.3rem; font-weight: 600; color: #fff; margin-bottom: 0.6rem; }
+        p { font-size: 0.92rem; color: rgba(255,255,255,0.6); margin-bottom: 1.8rem; }
+        a {
+            display: inline-block;
+            padding: 0.7rem 2rem;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.92rem;
+            transition: all 0.25s ease;
+        }
+        a:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+    </style>
+</head>
 <body>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx</center>
+    <div class="stars"></div>
+    <div class="box">
+        <div class="code">404</div>
+        <h1>页面走丢了</h1>
+        <p>你访问的页面不存在或已被移动。</p>
+        <a href="/">返回首页</a>
+    </div>
 </body>
 </html>
