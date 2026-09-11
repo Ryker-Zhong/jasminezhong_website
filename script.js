@@ -42,14 +42,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const qqIconLink = document.querySelector('.qr-trigger');
   const qrPopup = qqIconLink?.querySelector('.qr-popup');
   if (qqIconLink && qrPopup) {
+    const hideQrPopup = () => qrPopup.classList.remove('show');
     qqIconLink.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      qrPopup.classList.toggle('show');
+      if (qrPopup.classList.contains('show')) { hideQrPopup(); return; }
+      const rect = qqIconLink.getBoundingClientRect();
+      qrPopup.style.left = (rect.left + rect.width / 2) + 'px';
+      qrPopup.style.top = rect.top + 'px';
+      document.body.appendChild(qrPopup);
+      qrPopup.classList.add('show');
     });
     document.addEventListener('click', (e) => {
-      if (!qqIconLink.contains(e.target)) qrPopup.classList.remove('show');
+      if (!qqIconLink.contains(e.target) && !qrPopup.contains(e.target)) hideQrPopup();
     });
+    window.addEventListener('scroll', hideQrPopup, true);
+    window.addEventListener('resize', hideQrPopup);
   }
 
   // ────────── Particles ──────────
