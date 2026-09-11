@@ -110,9 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
   // ────────── Render Stars ──────────
   function renderStars(rating) {
-    return '<span style="color:#fbbf24">' + '★'.repeat(rating) + '☆'.repeat(5 - rating) + '</span>';
+    const r = Math.min(5, Math.max(0, parseInt(rating, 10) || 0));
+    return '<span style="color:#fbbf24">' + '★'.repeat(r) + '☆'.repeat(5 - r) + '</span>';
   }
 
   // ────────── Projects ──────────
@@ -122,11 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = await loadJSON('data/projects.json');
     grid.innerHTML = data.map(p => `
       <div class="card-item">
-        <div class="card-title">${p.title}</div>
-        <div class="card-desc">${p.desc}</div>
+        <div class="card-title">${esc(p.title)}</div>
+        <div class="card-desc">${esc(p.desc)}</div>
         <div class="card-footer">
           <div class="card-rating">${renderStars(p.rating)}</div>
-          <a href="${p.url || '#'}" target="_blank" class="card-link-btn"><i class="fa-brands fa-github"></i> 查看</a>
+          <a href="${esc(p.url || '#')}" target="_blank" class="card-link-btn"><i class="fa-brands fa-github"></i> 查看</a>
         </div>
       </div>
     `).join('');
@@ -189,13 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let filtered = notesData;
     if (notesFilter !== 'all') filtered = filtered.filter(n => n.category === notesFilter);
     if (searchVal) filtered = filtered.filter(n =>
-      n.title.toLowerCase().includes(searchVal) || n.desc.toLowerCase().includes(searchVal)
+      (n.title || '').toLowerCase().includes(searchVal) || (n.desc || '').toLowerCase().includes(searchVal)
     );
 
     grid.innerHTML = filtered.map(n => `
       <div class="card-item note-card" data-id="${n.id}">
-        <div class="card-title">${n.title}</div>
-        <div class="card-desc">${n.desc}</div>
+        <div class="card-title">${esc(n.title)}</div>
+        <div class="card-desc">${esc(n.desc)}</div>
         <div class="card-footer">
           <button class="btn-like ${myLikes.has(String(n.id)) ? 'liked' : ''}" data-id="${n.id}">
             <i class="fa-${myLikes.has(String(n.id)) ? 'solid' : 'regular'} fa-heart"></i> <span>${getNoteLikes(n.id)}</span>
@@ -266,10 +269,25 @@ document.addEventListener('DOMContentLoaded', () => {
     readingLike.querySelector('i').className = liked ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
   }
 
-  function openReadingModal(note) {
+  async function openReadingModal(note) {
     currentNoteId = note.id;
     readingTitle.textContent = note.title;
-    readingContent.innerHTML = (note.content || note.desc || '').split('\n').filter(Boolean).map(p => `<p>${p}</p>`).join('');
+    const sourceLink = document.getElementById('readingSource');
+    if (sourceLink) {
+      if (note.url) { sourceLink.href = note.url; sourceLink.style.display = ''; }
+      else sourceLink.style.display = 'none';
+    }
+    let html = '';
+    if (note.url && window.marked) {
+      try {
+        const res = await fetch(note.url);
+        if (res.ok) html = marked.parse(await res.text());
+      } catch (e) {
+        console.error('Failed to load note source', e);
+      }
+    }
+    if (!html) html = (note.content || note.desc || '').split('\n').filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('');
+    readingContent.innerHTML = html;
     updateReadingLikeUI();
     readingModal.classList.add('show');
   }
@@ -290,15 +308,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = await loadJSON('data/diary.json');
     timeline.innerHTML = data.map(e => {
       const tagsHtml = [];
-      if (e.weather) tagsHtml.push(`<span class="timeline-tag weather"><i class="fa-solid fa-cloud-sun"></i> ${e.weather}</span>`);
-      if (e.mood) tagsHtml.push(`<span class="timeline-tag mood"><i class="fa-regular fa-face-smile"></i> ${e.mood}</span>`);
-      const imgsHtml = (e.images || []).map(img => `<img src="${img}" class="timeline-img" alt="diary">`).join('');
+      if (e.weather) tagsHtml.push(`<span class="timeline-tag weather"><i class="fa-solid fa-cloud-sun"></i> ${esc(e.weather)}</span>`);
+      if (e.mood) tagsHtml.push(`<span class="timeline-tag mood"><i class="fa-regular fa-face-smile"></i> ${esc(e.mood)}</span>`);
+      const imgsHtml = (e.images || []).map(img => `<img src="${esc(img)}" class="timeline-img" alt="diary">`).join('');
       return `
         <div class="timeline-item">
-          <div class="timeline-date"><i class="fa-regular fa-calendar"></i> ${e.date}</div>
+          <div class="timeline-date"><i class="fa-regular fa-calendar"></i> ${esc(e.date)}</div>
           <div class="timeline-content">
-            <h4>${e.title}</h4>
-            <p>${e.content}</p>
+            <h4>${esc(e.title)}</h4>
+            <p>${esc(e.content)}</p>
             ${tagsHtml.length ? `<div class="timeline-tags">${tagsHtml.join('')}</div>` : ''}
             ${imgsHtml ? `<div class="timeline-images">${imgsHtml}</div>` : ''}
           </div>
@@ -340,11 +358,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const isExternal = url.startsWith('http');
       return `
         <div class="card-item">
-          <div class="card-title">${s.title}</div>
-          <div class="card-desc">${s.desc}</div>
+          <div class="card-title">${esc(s.title)}</div>
+          <div class="card-desc">${esc(s.desc)}</div>
           <div class="card-footer">
             <div class="card-rating">${renderStars(s.rating)}</div>
-            <a href="${url}" target="${isExternal ? '_blank' : '_self'}" class="card-link-btn"><i class="fa-solid fa-download"></i> 下载</a>
+            <a href="${esc(url)}" target="${isExternal ? '_blank' : '_self'}" class="card-link-btn"><i class="fa-solid fa-download"></i> 下载</a>
           </div>
         </div>
       `;
