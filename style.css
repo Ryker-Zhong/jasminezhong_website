@@ -437,13 +437,6 @@ body.bg-starry {
     font-size: 0.8rem;
     letter-spacing: 1px;
 }
-.card-item .card-link {
-    color: rgba(255,255,255,0.5);
-    font-size: 0.8rem;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-.card-item .card-link:hover { color: #60a5fa; }
 .card-link-btn {
     display: inline-flex;
     align-items: center;
