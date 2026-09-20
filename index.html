@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jasmine - Developer & Dreamer</title>
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -37,7 +37,6 @@
         <div class="nav-links" id="navLinks">
             <a href="#home" class="nav-link active" data-section="home"><i class="fa-solid fa-house"></i> 主页</a>
             <a href="#projects" class="nav-link" data-section="projects"><i class="fa-solid fa-code"></i> 项目作品</a>
-            <a href="#notes" class="nav-link" data-section="notes"><i class="fa-solid fa-book-open"></i> 学习笔记</a>
             <a href="#diary" class="nav-link" data-section="diary"><i class="fa-solid fa-feather"></i> 生活日记</a>
             <a href="#software" class="nav-link" data-section="software"><i class="fa-solid fa-box"></i> 软件分享</a>
             <a href="#secret" class="nav-link" data-section="secret"><i class="fa-solid fa-lock"></i> 秘密空间</a>
@@ -73,20 +72,6 @@
                 <h2 class="section-title"><i class="fa-solid fa-code"></i> 项目作品</h2>
                 <div class="section-subtitle">开源项目 & 个人作品</div>
                 <div class="card-grid" id="projectsGrid"></div>
-            </section>
-
-            <!-- ──── Notes ──── -->
-            <section id="notes" class="nav-section">
-                <h2 class="section-title"><i class="fa-solid fa-book-open"></i> 学习笔记</h2>
-                <div class="section-subtitle">知识沉淀 & 学习记录</div>
-                <div class="notes-toolbar">
-                    <div class="search-box">
-                        <i class="fa-solid fa-search"></i>
-                        <input type="text" id="notesSearch" placeholder="搜索笔记关键词...">
-                    </div>
-                    <div class="filter-tags" id="notesFilter"></div>
-                </div>
-                <div class="card-grid" id="notesGrid"></div>
             </section>
 
             <!-- ──── Diary ──── -->
@@ -159,26 +144,12 @@
         </div>
     </div>
 
-    <!-- ──── Reading Modal ──── -->
-    <div id="reading-modal" class="modal-overlay">
-        <div class="modal-box reading-box">
-            <button class="modal-close" id="readingClose">&times;</button>
-            <h3 class="modal-title" id="readingTitle"></h3>
-            <div class="reading-content" id="readingContent"></div>
-            <div class="reading-footer">
-                <a id="readingSource" class="btn-read" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-regular fa-file-lines"></i> 查看全文</a>
-                <button class="btn-like" id="readingLike"><i class="fa-regular fa-heart"></i> <span id="readingLikeCount">0</span></button>
-            </div>
-        </div>
-    </div>
-
     <!-- ──── Lightbox ──── -->
     <div id="lightbox" class="modal-overlay">
         <button class="modal-close" id="lightboxClose">&times;</button>
         <img id="lightboxImg" src="" alt="preview">
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
-    <script src="script.js?v=7"></script>
+    <script src="script.js?v=8"></script>
 </body>
 </html>
