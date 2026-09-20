@@ -81,6 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyEmailBtn = document.getElementById('copy-email-btn');
   const emailText = document.getElementById('email-text');
 
+  const EMAIL = ['3127737156', 'qq.com'].join('@');
+  if (emailText) emailText.textContent = EMAIL;
+
   if (emailIconLink && emailModal) {
     emailIconLink.addEventListener('click', (e) => { e.preventDefault(); emailModal.classList.add('show'); });
     closeEmailBtn.addEventListener('click', () => emailModal.classList.remove('show'));
@@ -99,13 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function initNavigation() {
     const links = document.querySelectorAll('.nav-link');
     const sections = document.querySelectorAll('.nav-section');
-    const navToggle = document.getElementById('navToggle');
-    const navLinks = document.querySelector('.nav-links');
-
-    navToggle?.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-    });
-
     links.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -115,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
         sections.forEach(s => s.classList.remove('active'));
         const section = document.getElementById(target);
         if (section) section.classList.add('active');
-        navLinks?.classList.remove('open');
       });
     });
   }
@@ -151,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="card-desc">${esc(p.desc)}</div>
         <div class="card-footer">
           <div class="card-rating">${renderStars(p.rating)}</div>
-          <a href="${esc(p.url || '#')}" target="_blank" class="card-link-btn"><i class="fa-brands fa-github"></i> 查看</a>
+          <a href="${esc(p.url || '#')}" target="_blank" rel="noopener noreferrer" class="card-link-btn"><i class="fa-brands fa-github"></i> 查看</a>
         </div>
       </div>
     `).join('');
@@ -219,81 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="card-desc">${esc(s.desc)}</div>
           <div class="card-footer">
             <div class="card-rating">${renderStars(s.rating)}</div>
-            <a href="${esc(url)}" target="${isExternal ? '_blank' : '_self'}" class="card-link-btn"><i class="fa-solid fa-download"></i> 下载</a>
+            <a href="${esc(url)}" target="${isExternal ? '_blank' : '_self'}" rel="noopener noreferrer" class="card-link-btn"><i class="fa-solid fa-download"></i> 下载</a>
           </div>
         </div>
       `;
     }).join('');
   }
   renderSoftware();
-
-  // ────────── Debug (Ctrl+Shift+D) ──────────
-  let debugLogs = [];
-  const _origError = console.error;
-  console.error = (...args) => { debugLogs.push(args.join(' ')); _origError.apply(console, args); };
-
-  document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-      e.preventDefault();
-      toggleDebugPanel();
-    }
-  });
-
-  function toggleDebugPanel() {
-    let panel = document.getElementById('debugPanel');
-    if (panel) { panel.remove(); return; }
-
-    panel = document.createElement('div');
-    panel.id = 'debugPanel';
-    panel.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <strong style="font-size:13px">⚙ Debug</strong>
-        <span id="debugClose" style="cursor:pointer;font-size:16px;opacity:.6">&times;</span>
-      </div>
-      <div id="debugBody"></div>
-    `;
-    Object.assign(panel.style, {
-      position:'fixed', bottom:'16px', right:'16px', zIndex:9999,
-      background:'rgba(0,0,0,0.85)', backdropFilter:'blur(12px)',
-      border:'1px solid rgba(255,255,255,0.12)', borderRadius:'12px',
-      padding:'12px 16px', maxWidth:'380px', maxHeight:'50vh',
-      overflow:'auto', fontFamily:'monospace', fontSize:'12px',
-      color:'rgba(255,255,255,0.85)', lineHeight:'1.6'
-    });
-    document.body.appendChild(panel);
-    document.getElementById('debugClose').onclick = () => panel.remove();
-
-    refreshDebugBody();
-    panel.addEventListener('click', (e) => {
-      if (e.target.id === 'debugRefresh') refreshDebugBody();
-    });
-  }
-
-  async function refreshDebugBody() {
-    const body = document.getElementById('debugBody');
-    if (!body) return;
-    let projectsCount = '?', diaryCount = '?', softwareCount = '?';
-    try {
-      const [p, d, s] = await Promise.all([
-        fetch('data/projects.json').then(r => r.json()),
-        fetch('data/diary.json').then(r => r.json()),
-        fetch('data/software.json').then(r => r.json())
-      ]);
-      projectsCount = p.length; diaryCount = d.length; softwareCount = s.length;
-    } catch {}
-    body.innerHTML = `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:8px">
-        <span>projects.json</span><span style="text-align:right;color:#60a5fa">${projectsCount} items</span>
-        <span>diary.json</span><span style="text-align:right;color:#60a5fa">${diaryCount} items</span>
-        <span>software.json</span><span style="text-align:right;color:#60a5fa">${softwareCount} items</span>
-        <span>console errors</span><span style="text-align:right;color:#f87171">${debugLogs.length}</span>
-      </div>
-      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:6px;display:flex;gap:6px">
-        <button id="debugRefresh" style="flex:1;padding:4px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;background:transparent;color:rgba(255,255,255,0.6);cursor:pointer;font-size:11px;font-family:inherit">⟳ Refresh</button>
-      </div>
-    `;
-    panel.addEventListener('click', (e) => {
-      if (e.target.id === 'debugRefresh') refreshDebugBody();
-    });
-  }
 });
