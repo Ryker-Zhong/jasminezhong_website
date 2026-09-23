@@ -13,7 +13,7 @@
     },
     {
         "title": "JXUT-BST 官网",
-        "desc": "蓝色技术工作室官网，使用 VitePress 构建。采用 Vue + TypeScript 技术栈，提供完整的文档和项目展示平台。",
+        "desc": "蓝色技术工作室(JXUT-BST)官网，使用 VitePress 构建。采用 Vue + TypeScript 技术栈，提供完整的文档和项目展示平台。",
         "rating": 5,
         "url": "https://github.com/Ryker-Zhong/JXUT-BST.github.io"
     },
